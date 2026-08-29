@@ -1,8 +1,8 @@
 ---
-
+---
 name: ruigu-design-system
 description: Design-to-Code skill for converting UI designs, prototypes, screenshots, Figma designs, and natural-language requirements into production-ready interfaces. Automatically identifies UI structure, determines which elements correspond to Ant Design components, detects the project's actual Ant Design version, uses the matching official Ant Design component and API when available, and lets the Agent implement elements that have no suitable Ant Design equivalent. Design visuals remain the source of truth for styling.
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # RUIGU Design System
 
