@@ -1,8 +1,8 @@
 ---
-
 name: ruigu-design-system
-description: Ant Design First Design-to-Code skill. Build pages primarily and systematically with the project's installed Ant Design component library. Analyze designs, prototypes, screenshots, Figma files, and natural-language requirements to determine page structure, functionality, and visual requirements, then implement the page using Ant Design components as the foundational UI system. When an appropriate Ant Design component exists, it MUST be used rather than recreated with native HTML or custom UI. Only elements that have no suitable Ant Design equivalent may be custom implemented. Design references control content, layout, and visual customization; Ant Design controls the foundational component system and implementation conventions.
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+description: Build interfaces with Ant Design as the primary UI component system. Analyze designs and prototypes, use the project's installed Ant Design version and official APIs, customize Ant Design components to match the design, and create custom components only when no suitable Ant Design component exists.
+---
+
 
 # RUIGU Design System
 
