@@ -174,27 +174,9 @@ These components have structural details that are easy to get wrong. Follow them
 
 **Modal / Drawer — dialogs**
 
-**Size spec (width):**
-- Small: `400px` — confirm / alert
-- Default: `520px` — general purpose
-- Medium: `640px` — forms with 1-2 columns
-- Large: `800px` — complex forms / data preview
-- Do NOT use percentage widths or `width="100%"`. Use fixed px values from above.
+**Width (fixed px only):** 400 (confirm) / 520 (default) / 640 (form) / 800 (complex). Never use percentage.
 
-**Standard structure — ALWAYS follow this layout:**
-```
-┌─────────────────────────────────────┐
-│  Title (bold, 16px)            [X]  │  ← header (antd default)
-├─────────────────────────────────────┤
-│                                     │
-│  Body content (scrollable if long)  │  ← children
-│                                     │
-├─────────────────────────────────────┤  ← border-top (antd default)
-│              [Cancel] [OK]          │  ← footer, right-aligned
-└─────────────────────────────────────┘
-```
-
-**Standard template — use this exact structure:**
+**Standard template — copy this structure, do not omit the divider:**
 ```tsx
 <Modal
   title="弹窗标题"
@@ -206,44 +188,38 @@ These components have structural details that are easy to get wrong. Follow them
   width={520}
   destroyOnClose
   maskClosable={false}
+  footer={[
+    <Button key="cancel" onClick={() => setVisible(false)}>取消</Button>,
+    <Button key="ok" type="primary" onClick={handleOk}>确定</Button>,
+  ]}
 >
-  {/* body content here */}
+  <div>body content here</div>
+  <Divider style={{ margin: '24px 0 0' }} />
 </Modal>
 ```
 
-**Form modal template:**
+**Form modal:**
 ```tsx
-<Modal title="编辑" open={visible} onCancel={...} onOk={form.submit} width={640} destroyOnClose maskClosable={false}>
+<Modal title="编辑" open={visible} onCancel={...} onOk={form.submit} width={640} destroyOnClose maskClosable={false}
+  footer={[<Button key="cancel" onClick={...}>取消</Button>, <Button key="ok" type="primary" onClick={form.submit}>确定</Button>]}>
   <Form form={form} layout="vertical" onFinish={handleSubmit}>
     <Form.Item name="name" label="名称" rules={[{ required: true }]}>
       <Input placeholder="请输入" />
     </Form.Item>
-    {/* more fields */}
   </Form>
+  <Divider style={{ margin: '24px 0 0' }} />
 </Modal>
 ```
 
-**Footer rules:**
-- Default footer: `Cancel` (left, default type) + `OK` (right, primary type), right-aligned.
-- Custom buttons: pass `footer={<Space><Button onClick={...}>自定义</Button><Button type="primary" onClick={...}>确定</Button></Space>}`.
-- NEVER left-align footer buttons unless the design explicitly requires it.
-- NEVER omit the footer for action modals (only info/preview modals may use `footer={null}`).
+**Hard rules:**
+- Footer buttons MUST be right-aligned: `取消` (default) on left, `确定` (primary) on right.
+- Divider between body and footer MUST be explicitly rendered with `<Divider />` — do NOT rely on Ant Design's default footer border, it may be invisible in some themes.
+- Always use custom `footer` prop (as shown above) to guarantee button order and divider placement.
+- Always set `destroyOnClose` so form state resets.
+- Always set `maskClosable={false}` for form modals.
+- NEVER build modal with `<div>` + z-index. NEVER use `width="80%"`. NEVER put action buttons in body.
 
-**Divider:**
-- Ant Design Modal already has a top border on the footer area — this is the default separator.
-- If the design shows an explicit divider line inside the body (above footer), add `<Divider />` at the end of body content.
-- Do NOT add extra `<hr />` or custom border divs.
-
-**Key props:** `title`, `width` (fixed px), `open`/`visible`, `onCancel`, `onOk`, `okText`, `cancelText`, `destroyOnClose`, `maskClosable={false}` for forms, `centered` for short modals.
-
-**NEVER do this:**
-- Do NOT build a modal with `<div>` + custom CSS + z-index. Always use `<Modal>`.
-- Do NOT use `width="80%"` or `width="100vw"`. Use fixed px.
-- Do NOT put action buttons inside the body instead of footer.
-- Do NOT change the footer text alignment to left/center unless the design explicitly shows it.
-- Do NOT forget `destroyOnClose` — form state must reset on close.
-
-**Drawer:** same rules, plus `placement` ("right" by default), `width` for left/right or `height` for top/bottom.
+**Drawer:** same rules + `placement` ("right" default), `width` or `height`.
 
 **Table — data grid**
 - Must have `columns` (each: `title`, `dataIndex`, `key`) and `dataSource`.
