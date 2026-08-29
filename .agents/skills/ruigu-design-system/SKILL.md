@@ -168,6 +168,43 @@ When you see any of the following elements in a design / prototype / requirement
 
 > If a design element is not in this table but Ant Design has a component for it, you still MUST use the Ant Design component. This table is a minimum enforcement list, not an exhaustive list.
 
+### High-Frequency Component Implementation Notes
+
+These components have structural details that are easy to get wrong. Follow them exactly.
+
+**Modal / Drawer — dialogs**
+- Always control with `open` (or `visible` in 4.x) + `onCancel` / `onClose`. Never render uncontrolled.
+- **Footer buttons**: default footer renders `Cancel` (left, default) + `OK` (right, primary). If the design has custom buttons or a different order, pass `footer={<Space><Button>自定义</Button><Button type="primary">确定</Button></Space>}`. Buttons inside footer are right-aligned by default.
+- **Divider between body and footer**: Ant Design Modal already has a visual separator via footer's top border. If the design shows an explicit line, add `<Divider />` at the end of the modal body content.
+- Key props: `title`, `width`, `centered`, `maskClosable={false}` for forms, `destroyOnClose`.
+- Drawer adds `placement` ("right" by default).
+
+**Table — data grid**
+- Must have `columns` (each: `title`, `dataIndex`, `key`) and `dataSource`.
+- Action column: use `render: () => <Space><Button type="link">编辑</Button><Button type="link" danger>删除</Button></Space>`.
+- Pagination: controlled via `pagination` prop; default position is bottom-right. Use `pagination={{ position: ['bottomRight'] }}` or `false` to hide.
+- Horizontal scroll: `scroll={{ x: 'max-content' }}` when columns overflow.
+- Row key: always set `rowKey="id"` (or unique field).
+
+**Form — data entry**
+- Every field MUST be wrapped in `<Form.Item name="fieldName" label="标签" rules={[{ required: true }]}>`.
+- Submit button: `<Button type="primary" htmlType="submit">` inside `<Form onFinish={handleSubmit}>`.
+- Layout: control label/input width with `labelCol={{ span: 6 }}` `wrapperCol={{ span: 18 }}` on Form or Form.Item.
+- Use `Form.useForm()` for form instance control (`validateFields`, `setFieldsValue`, `resetFields`).
+
+**Select / Radio.Group / Checkbox.Group — selection**
+- Select: provide `options={[{ label, value }]}` or `<Option>`. Enable search with `showSearch`.
+- Radio.Group: use `<Radio.Group value={val} onChange={...}><Radio value={1}>A</Radio><Radio value={2}>B</Radio></Radio.Group>` or `options` prop.
+- Checkbox.Group: same pattern as Radio.Group for multiple selection.
+- All three are controlled: `value` + `onChange`.
+
+**Button**
+- Variants: `type="primary"` (main action), `default` (secondary), `dashed`, `text`, `link`.
+- Danger: `danger` prop for destructive actions.
+- Sizes: `size="large" | "middle" | "small"`.
+- Loading state: `loading` prop.
+- Group buttons with `<Space>` to get consistent gaps.
+
 ---
 
 # 3. Ant Design Is the UI Foundation
@@ -898,21 +935,6 @@ uploads
 
 according to what the design requires.
 
-### Component checklist — MUST output before delivering
-
-Before delivering any code, you MUST explicitly list every UI element you identified and which Ant Design component you used. Format:
-
-```text
-| Design element | Ant Design component used | Correct? |
-|---|---|---|
-| 单选框 | Radio.Group | ✅ |
-| 弹窗 | Modal | ✅ |
-| 搜索框 | Input.Search | ✅ |
-| ... | ... | ... |
-```
-
-If any row says "custom" or "native HTML" or is missing an Ant Design component, go back and fix it before delivering. Do not skip this checklist.
-
 ---
 
 # 25. Priority Rules
@@ -1005,8 +1027,7 @@ Design / Prototype / Screenshot / Figma / Requirement
 17. Validate visual fidelity (colors → tokens, typography → type scale, spacing → 8px grid)
 18. Validate interaction
 19. Validate code
-20. Output the component checklist (Section 24) — confirm every element maps to an Ant Design component; if any is custom/native, go back and fix it
-21. Deliver final implementation
+20. Deliver final implementation
 ```
 
 ---
