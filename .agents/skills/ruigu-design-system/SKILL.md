@@ -1,993 +1,1080 @@
 ---
-name: RUIGU Design System
-description: >
-  RUIGU Design System is a bilingual Chinese-English UI design and
-  code-generation skill based on Ant Design 4.x. It interprets natural
-  language, screenshots, Figma designs, prototypes and existing UI
-  designs, identifies page patterns and UI components, maps them to
-  appropriate Ant Design 4.x components, and generates consistent
-  React + TypeScript code.
----
+
+name: ruigu-design-system
+description: Design-to-Code skill for converting UI designs, prototypes, screenshots, Figma designs, and natural-language requirements into production-ready interfaces. Automatically identifies UI structure, determines which elements correspond to Ant Design components, detects the project's actual Ant Design version, uses the matching official Ant Design component and API when available, and lets the Agent implement elements that have no suitable Ant Design equivalent. Design visuals remain the source of truth for styling.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # RUIGU Design System
 
-## 1. Role
+## 1. Mission
 
-You are an AI UI design and implementation assistant
-powered by RUIGU Design System.
+RUIGU is a **Design-to-Code execution skill**.
 
-Your responsibility is to transform:
+Its job is:
 
-- Chinese UI requirements
-- English UI requirements
-- Mixed Chinese-English requirements
-- Screenshots
-- Figma designs
-- UI prototypes
-- Existing UI designs
-- Existing frontend code
+**Design / Prototype / Screenshot / Figma / Requirement → UI Understanding → Component Decision → Ant Design Implementation → Visual Styling → Interaction → Code → Validation**
 
-into:
+RUIGU does **not** replace Ant Design.
 
-1. Correct page structure
-2. Correct UI component selection
-3. Ant Design 4.x implementation
-4. Consistent React + TypeScript code
+RUIGU does **not** create a second UI component library.
 
-The core principle is:
+RUIGU does **not** maintain duplicated Button/Input/Select/Table APIs.
 
-Understand the design first.
-Choose the component second.
-Implement with Ant Design 4.x third.
-Validate the result last.
+RUIGU uses the official Ant Design ecosystem as the authoritative source for components and APIs whenever a suitable Ant Design component exists.
 
 ---
 
-# 2. Language Understanding
+# 2. Core Principle
 
-RUIGU must understand Chinese and English
-as equivalent semantic inputs.
+The following rules are mandatory.
 
-Do not rely only on exact keyword matching.
+## Rule 1 — Ant Design is the component standard
+
+When the target project uses Ant Design and the design contains an element that can be represented by an Ant Design component:
+
+**Use the corresponding Ant Design component.**
+
+Do not replace an existing Ant Design component with:
+
+* native HTML controls
+* another UI component library
+* an unnecessary custom component
+* a visually similar hand-built component
 
 Examples:
 
-"增加一个按钮"
-→ Button
+* Button → Ant Design Button
+* Input → Ant Design Input
+* Search input → Ant Design Input.Search when appropriate
+* Select → Ant Design Select
+* Date selector → Ant Design DatePicker / RangePicker
+* Table → Ant Design Table
+* Form → Ant Design Form
+* Modal → Ant Design Modal
+* Drawer → Ant Design Drawer
+* Tabs → Ant Design Tabs
+* Pagination → Ant Design Pagination
+* Tag → Ant Design Tag
+* Badge → Ant Design Badge
+* Tooltip → Ant Design Tooltip
+* Dropdown → Ant Design Dropdown
+* Upload → Ant Design Upload
+* Progress → Ant Design Progress
+* Spin → Ant Design Spin
+* Empty → Ant Design Empty
+* Result → Ant Design Result
+* Alert → Ant Design Alert
+* Card → Ant Design Card
+* Descriptions → Ant Design Descriptions
+* Statistic → Ant Design Statistic
+* Steps → Ant Design Steps
+* Breadcrumb → Ant Design Breadcrumb
+* Menu → Ant Design Menu
+* Checkbox → Ant Design Checkbox
+* Radio → Ant Design Radio
+* Switch → Ant Design Switch
+* Slider → Ant Design Slider
+* AutoComplete → Ant Design AutoComplete
+* Cascader → Ant Design Cascader
+* TreeSelect → Ant Design TreeSelect
+* Tree → Ant Design Tree
+* List → Ant Design List
+* Avatar → Ant Design Avatar
+* Image → Ant Design Image
+* Calendar → Ant Design Calendar
 
-"增加一个button"
-→ Button
+This list is illustrative, not exhaustive.
 
-"add a button"
-→ Button
-
-"新增"
-→ Button
-
-"输入框"
-→ Input
-
-"input"
-→ Input
-
-"输入框 input"
-→ Input
-
-"下拉框"
-→ Select
-
-"dropdown"
-→ Select
-
-"选择器"
-→ Select
-
-"table"
-→ Table
-
-"数据表格"
-→ Table
-
-"供应商列表"
-→ List Page + Table
-
-"supplier list"
-→ List Page + Table
-
-"新增供应商"
-→ Form Page
-
-"create supplier"
-→ Form Page
-
-"供应商详情"
-→ Detail Page
-
-"supplier detail"
-→ Detail Page
-
-Interpret semantic intent,
-not literal language.
+Always check the actual Ant Design documentation for the available component.
 
 ---
 
-# 3. Supported Input
+# 3. Ant Design Version Policy
 
-RUIGU supports:
+Never assume a fixed Ant Design major version.
 
-- Natural language
-- Screenshots
-- Figma designs
-- Prototypes
-- UI mockups
-- Existing UI code
+The project version is authoritative.
 
-When an image or design is provided,
-analyze the complete interface before
-generating implementation code.
+## Version detection order
 
-Do not immediately convert visual elements
-into HTML.
+Before generating Ant Design code:
+
+1. Inspect `package.json`.
+2. Inspect the installed dependency if available.
+3. Determine the actual `antd` major version.
+4. Use the API and implementation conventions corresponding to that version.
+
+Examples:
+
+```text
+antd 4.x → use Ant Design 4.x API
+antd 5.x → use Ant Design 5.x API
+antd 6.x → use Ant Design 6.x API
+```
+
+Do not mix APIs across major versions.
+
+Do not silently upgrade or downgrade Ant Design.
+
+If the project does not specify an Ant Design version:
+
+* use the current official Ant Design documentation available to the environment;
+* if installation is required, use the project's existing dependency policy;
+* do not invent version-specific APIs.
+
+Official Ant Design source:
+
+https://ant.design/
+
+Official React documentation:
+
+https://ant.design/docs/react/introduce/
+
+Official component documentation:
+
+https://ant.design/components/
 
 ---
 
-# 4. Design Analysis Pipeline
+# 4. Ant Design Is the Source of Component Truth
 
-Always follow this sequence:
+Do not reproduce Ant Design component APIs inside this Skill.
+
+Do not maintain independent API definitions such as:
+
+```text
+button-api.md
+input-api.md
+select-api.md
+table-api.md
+```
+
+as authoritative sources.
+
+The official Ant Design documentation is the authoritative source for:
+
+* component availability
+* component API
+* props
+* events
+* supported states
+* composition
+* accessibility behavior
+* theme behavior
+* version-specific differences
+
+When uncertain about an API:
+
+**consult the official Ant Design documentation instead of guessing.**
+
+Never invent:
+
+* props
+* component names
+* events
+* hooks
+* methods
+* tokens
+* internal APIs
+
+Use documented public APIs.
+
+---
+
+# 5. Design Is the Visual Source of Truth
+
+The design, prototype, screenshot, Figma file, or supplied visual reference is the primary source of truth for appearance.
+
+When an Ant Design component is used, its implementation must be adapted to match the design.
+
+Extract and preserve, where visually available:
+
+* background colors
+* text colors
+* primary colors
+* secondary colors
+* border colors
+* divider colors
+* typography
+* font family
+* font size
+* font weight
+* line height
+* letter spacing
+* width
+* height
+* padding
+* margin
+* gap
+* border radius
+* border width
+* border style
+* shadows
+* opacity
+* icon size
+* icon position
+* alignment
+* component density
+* hover state
+* active state
+* focus state
+* disabled state
+* selected state
+* error state
+* warning state
+* success state
+* loading state
+
+Do not substitute Ant Design's default visual appearance when the design clearly specifies a different appearance.
+
+---
+
+# 6. Component Structure vs Visual Styling
+
+Separate these two decisions.
+
+## Component structure
+
+Determined by:
+
+**Ant Design**
+
+Example:
+
+```text
+Design element
+→ Button
+→ Ant Design Button
+```
+
+## Visual appearance
+
+Determined by:
+
+**Design**
+
+Example:
+
+```text
+Ant Design Button
++
+design background color
++
+design text color
++
+design height
++
+design radius
++
+design typography
+```
+
+Therefore:
+
+**Ant Design determines what the component is.**
+
+**The design determines what that component should look like.**
+
+Do not confuse these responsibilities.
+
+---
+
+# 7. When No Ant Design Component Exists
+
+If the design contains an element for which there is no appropriate Ant Design component:
+
+**do not force it into an unrelated Ant Design component.**
+
+Instead:
+
+1. Confirm that no suitable Ant Design component exists.
+2. Implement the element using the Agent's normal frontend capabilities.
+3. Reproduce the design as accurately as possible.
+4. Reuse Ant Design components internally where they are genuinely applicable.
+5. Do not falsely label the custom implementation as an Ant Design component.
+
+Example:
+
+```text
+Design element
+→ no suitable Ant Design component
+→ custom React component
+→ custom CSS / appropriate implementation
+```
+
+The absence of an Ant Design equivalent is an explicit exception to the Ant Design component requirement.
+
+---
+
+# 8. Custom Components Must Not Be Forced Into Ant Design
+
+Do not use an unrelated Ant Design component merely because it looks similar.
+
+Bad:
+
+```text
+Custom visualization
+→ force into Table
+```
+
+Bad:
+
+```text
+Custom navigation
+→ force into Menu
+```
+
+Bad:
+
+```text
+Custom editor
+→ force into Input
+```
+
+Correct:
+
+```text
+No suitable Ant Design component
+→ custom implementation
+```
+
+However, if part of the custom component contains standard controls, use Ant Design for those controls.
+
+Example:
+
+```text
+Custom advanced filter panel
+├── Ant Design Input
+├── Ant Design Select
+├── Ant Design DatePicker
+└── custom filter visualization
+```
+
+---
+
+# 9. Design-to-Code Analysis Process
+
+Before generating code, perform the following analysis internally.
+
+## Step 1 — Understand the page
+
+Identify:
+
+* page type
+* primary purpose
+* major sections
+* hierarchy
+* navigation
+* content areas
+* actions
+* forms
+* tables
+* dialogs
+* overlays
+* responsive regions
+
+Do not generate code before understanding the page structure.
+
+---
+
+## Step 2 — Identify UI regions
+
+Break the design into meaningful regions.
+
+Examples:
+
+```text
+Page
+├── Header
+├── Toolbar
+│   ├── Search
+│   ├── Filters
+│   └── Actions
+├── Content
+│   └── Table
+└── Pagination
+```
+
+or:
+
+```text
+Page
+├── Sidebar
+├── Header
+└── Main
+    ├── PageHeader
+    ├── Form
+    └── ActionArea
+```
+
+---
+
+# 10. Component Recognition
+
+For every visible UI element:
+
+1. Identify its semantic purpose.
+2. Identify its interaction behavior.
+3. Identify its visual appearance.
+4. Determine whether an Ant Design component represents it.
+5. If yes, use that component.
+6. If no, use a custom implementation.
+
+Do not identify components solely by visual shape.
+
+Use:
+
+* position
+* surrounding elements
+* text
+* interaction
+* state
+* semantic purpose
+* repeated patterns
+
+to determine the correct component.
+
+---
+
+# 11. Composite Component Recognition
+
+Do not assume one visual region equals one component.
+
+A single design region may correspond to multiple Ant Design components.
+
+Example:
+
+```text
+Filter bar
+→ Form
+   ├── Form.Item
+   │   └── Input
+   ├── Form.Item
+   │   └── Select
+   ├── Form.Item
+   │   └── DatePicker
+   └── Button
+```
+
+Another example:
+
+```text
+Search
+→ Input.Search
+```
+
+instead of:
+
+```text
+Input + manually constructed search button
+```
+
+when `Input.Search` correctly represents the intended behavior.
+
+---
+
+# 12. Layout Recognition
+
+Use the appropriate Ant Design layout primitives when applicable.
+
+Prefer:
+
+* Layout
+* Row
+* Col
+* Space
+* Grid
+* Flex
+* Divider
+
+according to the actual project version and available APIs.
+
+Do not create unnecessary layout components.
+
+Do not use arbitrary absolute positioning when the design can be accurately reproduced with normal layout systems.
+
+Absolute positioning is allowed when it is genuinely required by the design.
+
+---
+
+# 13. Typography
+
+Preserve the design's typography.
+
+Identify:
+
+* heading hierarchy
+* body text
+* secondary text
+* labels
+* helper text
+* captions
+* numeric text
+* links
+* emphasis
+
+Use Ant Design Typography where appropriate.
+
+Do not replace all typography with arbitrary `<div>` or `<span>` elements when an appropriate Ant Design typography component exists.
+
+However, do not force Typography components where plain text is more appropriate.
+
+---
+
+# 14. Color Handling
+
+Color is part of visual fidelity.
+
+For every Ant Design component visible in the design:
+
+1. identify its intended color;
+2. determine whether the current Ant Design version provides an appropriate public theme/token/API mechanism;
+3. use that mechanism when appropriate;
+4. otherwise use scoped styling;
+5. preserve the design color.
+
+Do not blindly use Ant Design default colors.
+
+Do not invent colors.
+
+Do not approximate a clearly identifiable color unnecessarily.
+
+Do not globally change Ant Design colors merely to match one isolated component.
+
+Use the smallest appropriate scope:
+
+```text
+global theme
+→ page-level token
+→ component-level style
+→ state-specific style
+```
+
+according to the project architecture.
+
+---
+
+# 15. Spacing and Dimensions
+
+Preserve meaningful dimensions from the design.
+
+Pay attention to:
+
+* component height
+* row height
+* column width
+* container width
+* padding
+* gaps
+* margins
+* alignment
+* vertical rhythm
+
+Do not normalize all dimensions to arbitrary defaults if the design clearly specifies different values.
+
+At the same time, do not hardcode every pixel unnecessarily when the design clearly represents a reusable spacing system.
+
+Infer reusable spacing relationships when appropriate.
+
+---
+
+# 16. States
+
+Identify component states shown or implied by the design.
+
+Examples:
+
+```text
+default
+hover
+active
+focus
+selected
+disabled
+loading
+error
+warning
+success
+expanded
+collapsed
+checked
+unchecked
+open
+closed
+```
+
+If the design shows a state, reproduce it.
+
+If the interaction logically requires a state that is not visually shown, implement the behavior using the corresponding Ant Design API when available.
+
+Do not invent unnecessary states.
+
+---
+
+# 17. Interaction
+
+Do not generate static screenshots disguised as applications.
+
+When the design implies interaction, implement the interaction.
+
+Examples:
+
+```text
+Button
+→ onClick
 
 Input
-↓
-Page Understanding
-↓
-Page Pattern Recognition
-↓
-Region Recognition
-↓
-Interaction Recognition
-↓
-Component Recognition
-↓
-RUIGU Component Mapping
-↓
-Ant Design 4.x Selection
-↓
-Code Generation
-↓
-Validation
+→ value / onChange
 
-Do not skip the semantic analysis stage.
-
----
-
-# 5. Page Pattern Recognition
-
-Identify the primary page pattern before
-selecting individual components.
-
-Supported patterns:
-
-- List Page
-- Detail Page
-- Form Page
-- Dashboard Page
-- Search / Result Page
-- Modal Form
-- Empty State
-- Login / Authentication
-
-Read:
-
-core/page-patterns.md
-
-The page pattern should determine
-the initial page structure.
-
----
-
-# 6. Region Recognition
-
-Identify meaningful UI regions.
-
-Common regions:
-
-- Page Header
-- Breadcrumb
-- Search Area
-- Filter Area
-- Action Area
-- Content Area
-- Data Area
-- Detail Area
-- Form Area
-- Footer Actions
-- Sidebar
-- Modal
-- Drawer
-
-Do not create a custom component
-for every visual rectangle.
-
-A region should represent a meaningful
-semantic or interaction boundary.
-
----
-
-# 7. Component Recognition
-
-Identify the most appropriate component
-for each semantic element.
-
-Examples:
-
-Text input
-→ Input
-
-Search input
-→ Input.Search
-
-Password input
-→ Input.Password
-
-Multiline text
-→ Input.TextArea
-
-Single selection
-→ Select
-
-Multiple selection
-→ Select with mode="multiple"
-
-Date selection
-→ DatePicker
-
-Data table
-→ Table
-
-Pagination
-→ Pagination
-
-Primary action
-→ Button type="primary"
-
-Destructive action
-→ Button danger
-
-Low-emphasis action
-→ Button type="text"
-
-Navigation-like action
-→ Button type="link"
-
-Grouped information
-→ Card
-
-Structured information
-→ Descriptions
-
-Status
-→ Tag / Badge
-
-Confirmation
-→ Modal / Popconfirm
-
-Empty content
-→ Empty
-
-Loading
-→ Spin / Skeleton
-
-Use:
-
-core/component-mapping.md
-
-for component selection rules.
-
----
-
-# 8. Ant Design 4.x Authority
-
-Ant Design 4.x is the required UI component foundation.
-
-Official documentation:
-
-https://4x.ant.design/
-
-All generated UI components should
-prefer Ant Design 4.x.
-
-Do not use another UI library
-when an appropriate Ant Design component exists.
-
-Do not invent Ant Design components.
-
-Do not invent Ant Design props.
-
-Do not use Ant Design 5.x-only APIs.
-
-Read:
-
-core/ant-design-rules.md
-
-before implementation.
-
----
-
-# 9. Component Rule Files
-
-Component-specific files define
-RUIGU's semantic usage and decision rules.
-
-Available components include:
-
-components/button.md
-components/input.md
-components/select.md
-components/table.md
-
-These files explain when and why
-a component should be selected.
-
-They are not intended to replace
-the complete Ant Design documentation.
-
----
-
-# 10. API References
-
-When a component-specific API reference exists,
-use it as an additional implementation reference.
-
-Example:
-
-api/button-api.md
-
-API references must remain consistent
-with Ant Design 4.x.
-
-Do not assume that the existence of an API file
-means other components require identical files.
-
-Use API references when available.
-Otherwise follow the official Ant Design 4.x API.
-
----
-
-# 11. Component Selection Priority
-
-When selecting a component:
-
-1. Semantic intent
-2. Interaction behavior
-3. Information structure
-4. Page pattern
-5. Ant Design standard pattern
-6. Visual appearance
-
-Do not choose a component
-only because it visually resembles
-the design.
-
-The component must also match
-the intended behavior.
-
----
-
-# 12. Existing Component First
-
-Before creating custom UI:
-
-1. Check Ant Design 4.x.
-2. Check whether existing Ant Design components
-   can be composed.
-3. Only then consider a custom component.
-
-Priority:
-
-Ant Design Component
->
-Ant Design Composition
->
-Custom Component
-
-Custom implementation should be the exception,
-not the default.
-
----
-
-# 13. Design to Ant Design
-
-When analyzing a design,
-create an internal semantic mapping.
-
-Example:
-
-Design:
-
-Supplier Management
-
-Search area:
-
-Supplier Name
-→ Input
-
-Status
-→ Select
-
-Search
-→ Button
-
-Reset
-→ Button
-
-Action:
-
-Create Supplier
-→ Button type="primary"
-
-Data:
-
-Supplier records
-→ Table
-
-Row action:
-
-Edit
-→ Button type="link"
-
-Page structure:
-
-List Page
-
-Do not reproduce the screenshot
-using arbitrary div elements
-when Ant Design provides the correct component.
-
----
-
-# 14. Visual Fidelity
-
-Visual fidelity is important,
-but component correctness has priority.
-
-Priority:
-
-1. Correct component
-2. Correct behavior
-3. Correct page hierarchy
-4. Correct information
-5. Correct layout
-6. Correct spacing
-7. Correct typography
-8. Visual details
-
-Do not replace an Ant Design component
-with custom HTML/CSS solely to reproduce
-a minor visual difference.
-
----
-
-# 15. Layout
-
-Prefer Ant Design layout mechanisms
-where appropriate.
-
-Examples:
-
-- Row
-- Col
-- Space
-- Grid-related Ant Design patterns
-
-Avoid excessive absolute positioning.
-
-Do not convert a Figma design
-into a collection of fixed coordinates.
-
-The generated page should remain
-structurally maintainable and responsive.
-
----
-
-# 16. Forms
-
-For structured input,
-prefer Ant Design Form.
-
-Use:
+Select
+→ value / onChange
 
 Form
-+
-Form.Item
-+
-Ant Design input components
+→ validation / submit
 
-Example:
+Table
+→ sorting / filtering / pagination when shown or required
 
-<Form>
-  <Form.Item
-    name="supplierName"
-    label="供应商名称"
-    rules={[
-      {
-        required: true,
-        message: '请输入供应商名称',
-      },
-    ]}
-  >
-    <Input />
-  </Form.Item>
-</Form>
+Modal
+→ open / close
 
-Do not manually recreate
-Ant Design form validation behavior.
+Drawer
+→ open / close
+
+Tabs
+→ active tab state
+
+Dropdown
+→ menu interaction
+
+Upload
+→ upload interaction when required
+```
+
+Use the project's existing architecture and Ant Design's official public APIs.
 
 ---
 
-# 17. Tables
+# 18. Existing Project Architecture
 
-For structured tabular information,
-prefer Table.
+When generating code inside an existing project:
 
-Example:
+1. inspect the existing architecture;
+2. reuse existing components where appropriate;
+3. preserve existing routing;
+4. preserve existing state management;
+5. preserve existing styling conventions;
+6. preserve existing package versions;
+7. avoid unnecessary dependency changes.
 
-<Table
-  columns={columns}
-  dataSource={dataSource}
-  rowKey="id"
-/>
+Do not rewrite the entire application merely to implement one page.
 
-Use Ant Design Table features
-when required by the design:
-
-- pagination
-- rowSelection
-- sorter
-- filters
-- expandable rows
-
-Do not recreate table behavior
-with manually constructed div elements.
+Do not introduce a new UI framework if Ant Design is already present.
 
 ---
 
-# 18. Buttons
+# 19. New Project / Empty Environment
 
-Use Button according to semantic intent.
+When no existing application exists:
 
-Examples:
+Use a conventional React implementation compatible with the environment.
 
-Primary:
+If Ant Design is required:
 
-<Button type="primary">
-  新增
-</Button>
+```bash
+npm install antd
+```
 
-Default:
+Use the package version appropriate to the environment and project constraints.
 
-<Button>
-  取消
-</Button>
+Prefer modular imports and the project's established build system.
 
-Danger:
-
-<Button danger>
-  删除
-</Button>
-
-Text:
-
-<Button type="text">
-  更多
-</Button>
-
-Link:
-
-<Button type="link">
-  查看详情
-</Button>
-
-Do not use:
-
-<Button type="danger">
-
-because danger is a property,
-not a Button type.
-
-Do not replace Ant Design Button
-with native:
-
-<button>
-
-when an Ant Design Button is appropriate.
+Do not add unrelated dependencies.
 
 ---
 
-# 19. Icons
+# 20. React and TypeScript
 
-Prefer Ant Design Icons
-when an appropriate icon exists.
+When the target is a React application:
+
+* use React components;
+* use TypeScript when the project uses TypeScript;
+* use semantic component structure;
+* use typed props;
+* avoid unnecessary `any`;
+* keep components maintainable;
+* keep business logic separate from presentation when appropriate.
 
 Use:
 
-@ant-design/icons
+```tsx
+import { Button } from 'antd';
+```
 
-Examples:
-
-PlusOutlined
-SearchOutlined
-EditOutlined
-DeleteOutlined
-DownloadOutlined
-
-Do not create custom SVG icons
-when an appropriate Ant Design icon exists.
+rather than recreating the Button.
 
 ---
 
-# 20. Custom CSS
+# 21. Icons
 
-Custom CSS is allowed for:
+When the design uses an icon:
 
-- spacing
-- layout
-- typography
-- responsive behavior
-- project-specific visual identity
+1. determine whether an Ant Design icon exists;
+2. use the corresponding official icon when appropriate;
+3. preserve icon size and visual placement;
+4. if no suitable Ant Design icon exists, use an appropriate project-approved icon or custom asset.
 
-Do not recreate an existing
-Ant Design component through CSS.
+Do not substitute arbitrary emoji for interface icons.
 
-Incorrect:
-
-<div className="custom-button">
-  新增
-</div>
-
-when the element is semantically a button.
-
-Prefer:
-
-<Button type="primary">
-  新增
-</Button>
+Do not use unrelated icons merely because they are available.
 
 ---
 
-# 21. Custom Components
+# 22. Accessibility
 
-A custom component may be created only when:
+Preserve accessible behavior.
 
-1. no appropriate Ant Design component exists
-2. Ant Design components cannot reasonably
-   be composed to satisfy the requirement
-3. the behavior is genuinely project-specific
+Use:
 
-When creating a custom component,
-reuse Ant Design components internally
-whenever possible.
+* semantic labels
+* appropriate form labels
+* keyboard interaction
+* focus behavior
+* accessible names
+* meaningful button text
+* appropriate disabled states
 
-Example:
-
-A custom SupplierStatus component
-may internally use:
-
-<Tag />
-
-Do not rebuild Tag from scratch.
+Do not sacrifice accessibility merely to reproduce a visual appearance.
 
 ---
 
-# 22. Existing Project Compatibility
+# 23. Responsive Behavior
 
-If existing project code is provided,
-inspect the project before generating code.
+If the design includes multiple breakpoints or responsive references:
 
-Consider:
+implement the responsive behavior.
 
-- package.json
-- installed Ant Design version
-- existing component structure
-- existing layout system
-- existing design tokens
-- existing utility components
+If only one desktop design is provided:
 
-Generated code should fit the existing project.
+infer reasonable responsive behavior without changing the intended desktop appearance.
 
-Do not blindly replace the project's architecture.
+Use the project's existing responsive architecture.
+
+Do not invent elaborate responsive behavior that the design does not imply.
 
 ---
 
-# 23. Code Generation
+# 24. Do Not Overwrite the Design
 
-Default output:
+Do not:
 
-React + TypeScript
+* redesign the page;
+* modernize the UI without instruction;
+* change colors for aesthetic reasons;
+* replace components because another component seems prettier;
+* add gradients without evidence;
+* add shadows without evidence;
+* add animations without evidence;
+* change spacing without evidence;
+* change typography without evidence.
 
-Prefer:
-
-functional components
-
-semantic component names
-
-clear TypeScript types
-
-maintainable structure
-
-Avoid unnecessary abstraction.
-
-For simple UI,
-do not create excessive component layers.
+The task is implementation, not redesign.
 
 ---
 
-# 24. Code Validation
+# 25. Design Fidelity Priority
 
-Before returning generated code,
-validate the implementation.
+When implementing an Ant Design component, preserve the following in order:
 
-## Page
+1. semantic component identity;
+2. required interaction;
+3. visual structure;
+4. color;
+5. dimensions;
+6. spacing;
+7. typography;
+8. border;
+9. radius;
+10. shadow;
+11. state appearance;
+12. micro-details.
 
-[ ] Correct page pattern
-
-[ ] Correct page hierarchy
-
-[ ] Correct major regions
-
-## Components
-
-[ ] Correct Ant Design component
-
-[ ] Correct semantic mapping
-
-[ ] No unnecessary custom components
-
-[ ] No other UI library
-
-## API
-
-[ ] Ant Design 4.x API
-
-[ ] No invented props
-
-[ ] No Ant Design 5.x-only API
-
-[ ] Correct component states
-
-## Code
-
-[ ] React
-
-[ ] TypeScript
-
-[ ] Correct imports
-
-[ ] Maintainable structure
-
-[ ] No unnecessary native controls
-
-[ ] No excessive absolute positioning
-
-## Design
-
-[ ] Main layout preserved
-
-[ ] Information hierarchy preserved
-
-[ ] Primary actions preserved
-
-[ ] Important interaction states preserved
+Do not sacrifice component identity merely to obtain superficial pixel similarity.
 
 ---
 
-# 25. Do Not Hallucinate
+# 26. Ant Design Component Decision
 
-Do not invent:
+For each significant design element, internally make this decision:
 
-- business logic
-- API endpoints
-- data fields
-- workflows
-- component properties
-- design specifications
-- user requirements
+```text
+What is this element?
 
-when they are not provided.
+        ↓
 
-When implementation requires
-reasonable assumptions,
-keep them minimal.
+Does Ant Design provide an appropriate component?
 
-Clearly distinguish design-derived information
-from implementation assumptions.
+        ↓
 
----
+YES
+→ use Ant Design
 
-# 26. Output Behavior
+NO
+→ implement custom
 
-When the user asks for a UI implementation,
-prioritize delivering usable code.
+        ↓
 
-Recommended output:
+If Ant Design:
+→ determine project version
+→ verify official API
+→ implement component
+→ apply design-specific visual styling
 
-1. brief component mapping
-2. implementation
-3. relevant implementation notes
-
-Do not provide unnecessary long explanations.
-
-When the user only asks for a component,
-do not generate an entire page.
-
-When the user asks for an entire page,
-analyze the page pattern first.
+If custom:
+→ implement normally
+→ match design
+→ reuse Ant Design subcomponents where appropriate
+```
 
 ---
 
-# 27. Example: Natural Language
+# 27. API Verification
 
-User:
+Before using an unfamiliar Ant Design API:
 
-"做一个供应商管理页面"
+* verify that the component exists;
+* verify the API exists in the project's version;
+* verify prop names;
+* verify event names;
+* verify value types;
+* verify composition rules.
 
-RUIGU should infer:
+Never fabricate an API based on memory.
 
-Page Pattern:
-List Page
-
-Likely regions:
-
-Page Header
-Search Area
-Action Area
-Table Area
-
-Likely components:
-
-Input
-Select
-Button
-Table
-
-Primary action:
-
-Button type="primary"
-
-Then generate:
-
-React
-+
-TypeScript
-+
-Ant Design 4.x
+Never use undocumented internal APIs when a documented public API exists.
 
 ---
 
-# 28. Example: Design Image
+# 28. Validation
 
-Input:
+After generating the page, perform a self-check.
 
-A supplier management design image.
+## Component validation
 
-RUIGU should analyze:
+Check:
 
-1. page purpose
-2. page pattern
-3. page regions
-4. controls
-5. actions
-6. table
-7. statuses
-8. interaction states
+* every obvious Ant Design-compatible element uses Ant Design;
+* no unnecessary custom replacement exists;
+* no unrelated Ant Design component was forced into use;
+* custom elements are genuinely unsupported or materially different.
 
-Then map:
+## Version validation
 
-Design
-→ Semantic Intent
-→ RUIGU Component
-→ Ant Design 4.x
-→ React Code
+Check:
 
-Do not generate code
-until the component mapping
-has been internally determined.
+* generated APIs match the project's installed Ant Design version;
+* no cross-version APIs are mixed;
+* no invented APIs exist.
 
----
+## Visual validation
 
-# 29. Example: Mixed Language
+Check:
 
-User:
+* colors
+* typography
+* spacing
+* dimensions
+* borders
+* radius
+* shadows
+* alignment
+* icons
+* states
 
-"这里增加一个primary button，文字是新增供应商"
+against the design.
 
-Interpretation:
+## Interaction validation
 
-Component:
-Button
+Check:
 
-Type:
-primary
+* buttons work;
+* inputs work;
+* selects work;
+* forms work;
+* dialogs open and close;
+* tabs switch;
+* pagination works when required;
+* filtering/sorting works when required;
+* loading/error/disabled states work when required.
 
-Label:
-新增供应商
+## Code validation
 
-Implementation:
+Check:
 
-<Button type="primary">
-  新增供应商
-</Button>
-
----
-
-# 30. Example: English
-
-User:
-
-"Create a supplier management page
-with a search input, status dropdown,
-create button and data table."
-
-Interpretation:
-
-Page Pattern:
-List Page
-
-Components:
-
-Input
-Select
-Button
-Table
-
-Implementation:
-
-Ant Design 4.x
-+
-React
-+
-TypeScript
+* imports are valid;
+* components compile;
+* TypeScript types are valid;
+* no unnecessary dependencies were introduced;
+* no placeholder components remain;
+* no obvious runtime errors exist.
 
 ---
 
-# 31. Final Principle
+# 29. Output Requirements
 
-RUIGU is not a copy of the Ant Design documentation.
+When the user asks to generate a page:
 
-RUIGU is an AI design interpretation layer
-built on top of Ant Design 4.x.
+Do the analysis internally.
 
-Ant Design provides:
+Do not force the user to provide a component-by-component specification unless the design is genuinely ambiguous.
 
-- components
-- APIs
-- interaction behavior
-- implementation standards
+Return the implementation appropriate to the target environment.
 
-RUIGU provides:
+If code is requested:
 
-- design understanding
-- page pattern recognition
-- semantic interpretation
-- component selection
-- design-to-component mapping
-- implementation consistency
+* provide complete usable code;
+* include required imports;
+* include required styles;
+* include required supporting components;
+* include required interaction logic;
+* do not leave critical UI as pseudocode.
 
-The final process is:
+If a visual element cannot be confidently identified:
 
-Design
-+
-Human Intent
+make the most reasonable interpretation based on surrounding context and the design rather than stopping unnecessarily.
+
+---
+
+# 30. User Prompt Requirements
+
+The user should not need to repeat RUIGU's internal rules.
+
+A normal request may be as simple as:
+
+> Generate this page from the provided design.
+
+or:
+
+> Convert this design into a React page using RUIGU.
+
+The Skill itself is responsible for:
+
+* identifying components;
+* checking Ant Design;
+* checking the project version;
+* verifying APIs;
+* applying design styling;
+* implementing interaction;
+* validating the result.
+
+Do not require the user to repeat these instructions.
+
+---
+
+# 31. Important Exceptions
+
+## Exception A — No Ant Design equivalent
+
+Use a custom implementation.
+
+## Exception B — Existing project custom component
+
+Reuse it when appropriate instead of unnecessarily replacing it.
+
+## Exception C — Design explicitly requires a custom component
+
+Implement the custom component.
+
+## Exception D — Ant Design component exists but cannot reproduce a required behavior
+
+Use Ant Design as the base where appropriate and extend it with custom logic/styling.
+
+## Exception E — Project uses another UI framework
+
+Do not silently replace the entire project's UI architecture.
+
+Follow the existing project architecture unless the user explicitly requests migration to Ant Design.
+
+---
+
+# 32. Non-Negotiable Rules
+
+The following rules override convenience:
+
+### MUST
+
+* inspect the project before generating;
+* detect the actual Ant Design version;
+* use Ant Design when an appropriate component exists;
+* use official public APIs;
+* use the design as visual truth;
+* implement interactions represented by the design;
+* validate the result.
+
+### MUST NOT
+
+* assume Ant Design 4.x;
+* assume Ant Design 5.x;
+* assume Ant Design 6.x;
+* invent component APIs;
+* mix major-version APIs;
+* replace Ant Design components with native controls without reason;
+* force unsupported designs into unrelated Ant Design components;
+* require the user to manually describe every component;
+* redesign the provided design;
+* blindly apply Ant Design default colors when the design specifies different colors;
+* depend on other RUIGU files for core execution.
+
+---
+
+# 33. Execution Summary
+
+For every Design-to-Code task, follow this sequence:
+
+```text
+INPUT
+Design / Prototype / Screenshot / Figma / Requirement
+
 ↓
-RUIGU Interpretation
-↓
-Correct Ant Design 4.x Component
-↓
-Official Ant Design API
-↓
-React + TypeScript
-↓
-Validation
 
-Always understand first.
-Always map second.
-Always implement third.
-Always validate last.
+1. Inspect project
+2. Detect Ant Design version
+3. Understand page structure
+4. Identify UI regions
+5. Identify semantic elements
+6. Determine interaction
+7. Match each element to Ant Design where appropriate
+8. Verify official API for the project version
+9. Identify design visual properties
+10. Implement Ant Design components
+11. Implement custom components only where necessary
+12. Apply design-specific visual styling
+13. Implement interaction
+14. Validate component usage
+15. Validate version/API correctness
+16. Validate visual fidelity
+17. Validate interaction
+18. Validate code
+19. Deliver the final implementation
+
+OUTPUT
+Production-ready page implementation
+```
+
+# 34. Final Principle
+
+**RUIGU does not compete with Ant Design.**
+
+Ant Design defines the components.
+
+The project defines the installed version.
+
+The design defines the visual result.
+
+RUIGU connects the two.
+
+Therefore:
+
+**Design → Understand → Match Ant Design → Verify API → Implement → Style from Design → Validate.**
+
+That is the complete RUIGU Design-to-Code workflow.
