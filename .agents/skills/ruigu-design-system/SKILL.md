@@ -1,3 +1,4 @@
+
 ---
 name: ruigu-design-system
 description: 根据原型/设计稿/自然语言命令自动识别所需 UI 组件，始终以项目实际安装的 Ant Design 版本为实现基础：有对应组件必须使用 Ant Design，无对应组件才自定义，并按设计稿进行视觉样式定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists, and visually customize components to match the design.
@@ -170,96 +171,122 @@ When you see any of the following elements in a design / prototype / requirement
 
 ### High-Frequency Component Implementation Notes
 
-**Global principle for ALL components: Use Ant Design's default props and default visual structure. Do NOT manually add dividers, borders, spacing, or other elements that Ant Design already renders by default. If a default visual element is missing, you passed the wrong props — fix the props, do not patch with custom CSS.** If the design explicitly differs from Ant Design default, then customize via official props / tokens.
+**Core rule: Use the MINIMUM default props. Do NOT add any prop that changes Ant Design's default layout or visual structure. Only add props when the design explicitly requires a deviation from default.**
 
-These components have structural details that are easy to get wrong. Follow them exactly.
+If a default visual element (divider, border, spacing, icon) is missing, you omitted a required prop — fix the prop, do NOT patch with custom CSS.
 
-**Modal / Drawer — dialogs**
+---
 
-**Use Ant Design Modal's DEFAULT structure. Do NOT customize visual style.**
+**Modal**
 
-Ant Design Modal comes with built-in structure out of the box:
-- Header with `title` + close button, with a bottom divider line (border-bottom)
-- Body for content
-- Footer with `Cancel` (left, default) + `OK` (right, primary), with a top divider line (border-top, full-width)
+Ant Design Modal default structure (rendered automatically when props are correct):
+- Header: `title` + close button + bottom divider line
+- Body: your content
+- Footer: `Cancel` (left) + `OK` (right, primary) + top divider line (full-width)
 
-**If dividers are missing, you forgot to pass `title` or `onOk`/`onCancel`. Do NOT manually add `<Divider />` or custom borders — fix the props instead.**
+**Minimum required props — all three MUST be present:**
+- `title` — without it, no header and no header divider
+- `onOk` — without it, no footer button and no footer divider
+- `onCancel` — without it, no footer button and no footer divider
 
-**Width (fixed px only):** 400 (confirm) / 520 (default) / 640 (form) / 800 (complex). Never percentage.
-
-**Standard template — use default props, no custom footer:**
+**Template (copy exactly, do not add/remove props):**
 ```tsx
 <Modal
-  title="弹窗标题"
+  title="标题"
   open={visible}
-  onCancel={() => setVisible(false)}
   onOk={handleOk}
-  okText="确定"
-  cancelText="取消"
-  width={520}
-  destroyOnClose
-  maskClosable={false}
+  onCancel={() => setVisible(false)}
 >
-  {/* body content */}
+  内容
 </Modal>
 ```
 
-**Form modal:**
+**Form in Modal (default horizontal layout — label left, input right):**
 ```tsx
-<Modal
-  title="编辑"
-  open={visible}
-  onCancel={() => setVisible(false)}
-  onOk={form.submit}
-  width={640}
-  destroyOnClose
-  maskClosable={false}
->
-  <Form form={form} layout="vertical" onFinish={handleSubmit}>
+<Modal title="编辑" open={visible} onOk={form.submit} onCancel={() => setVisible(false)}>
+  <Form form={form} onFinish={handleSubmit}>
     <Form.Item name="name" label="名称" rules={[{ required: true }]}>
-      <Input placeholder="请输入" />
+      <Input />
     </Form.Item>
   </Form>
 </Modal>
 ```
 
-**Rules:**
-- Always pass `title` — without it there is no header divider.
-- Always pass `onOk` + `onCancel` — without them there is no footer (and no footer divider).
-- Do NOT pass `footer={null}` for action modals (only pure-info modals may omit footer).
-- Do NOT pass custom `footer` unless the design explicitly requires non-standard buttons.
-- Do NOT manually add `<Divider />`, `<hr />`, or custom border CSS — Ant Design renders dividers automatically when props are correct.
-- Do NOT build modal with `<div>` + z-index. Always use `<Modal>`.
-- Do NOT use percentage width.
-- Always `destroyOnClose` + `maskClosable={false}` for forms.
+**FORBIDDEN:**
+- `footer={null}` — removes footer and its divider
+- Custom `footer={...}` — only when design explicitly requires non-standard buttons
+- Manual `<Divider />` inside body — Ant Design already renders dividers
+- `layout="vertical"` on Form — changes default horizontal to vertical (label above input)
+- `<div>` + z-index mock modal — always use `<Modal>`
+- Percentage `width`
 
-**Drawer:** same rules + `placement` ("right" default), `width` or `height`.
+**Optional (only when needed):** `width` (fixed px), `okText`, `cancelText`, `destroyOnClose`, `maskClosable={false}`.
 
-**Table — data grid**
-- Must have `columns` (each: `title`, `dataIndex`, `key`) and `dataSource`.
-- Action column: use `render: () => <Space><Button type="link">编辑</Button><Button type="link" danger>删除</Button></Space>`.
-- Pagination: controlled via `pagination` prop; default position is bottom-right. Use `pagination={{ position: ['bottomRight'] }}` or `false` to hide.
-- Horizontal scroll: `scroll={{ x: 'max-content' }}` when columns overflow.
-- Row key: always set `rowKey="id"` (or unique field).
+**Drawer:** same rules + `placement` ("right" default).
 
-**Form — data entry**
-- Every field MUST be wrapped in `<Form.Item name="fieldName" label="标签" rules={[{ required: true }]}>`.
-- Submit button: `<Button type="primary" htmlType="submit">` inside `<Form onFinish={handleSubmit}>`.
-- Layout: control label/input width with `labelCol={{ span: 6 }}` `wrapperCol={{ span: 18 }}` on Form or Form.Item.
-- Use `Form.useForm()` for form instance control (`validateFields`, `setFieldsValue`, `resetFields`).
+---
 
-**Select / Radio.Group / Checkbox.Group — selection**
-- Select: provide `options={[{ label, value }]}` or `<Option>`. Enable search with `showSearch`.
-- Radio.Group: use `<Radio.Group value={val} onChange={...}><Radio value={1}>A</Radio><Radio value={2}>B</Radio></Radio.Group>` or `options` prop.
-- Checkbox.Group: same pattern as Radio.Group for multiple selection.
-- All three are controlled: `value` + `onChange`.
+**Form**
+
+Default layout is **horizontal** (label on left, input on right). Do NOT add `layout="vertical"`.
+
+**Template:**
+```tsx
+<Form onFinish={handleSubmit}>
+  <Form.Item name="username" label="用户名" rules={[{ required: true }]}>
+    <Input />
+  </Form.Item>
+  <Form.Item>
+    <Button type="primary" htmlType="submit">提交</Button>
+  </Form.Item>
+</Form>
+```
+
+**Required:** every field wrapped in `<Form.Item name="xxx" label="xxx">`. Submit button has `htmlType="submit"`.
+**Optional:** `labelCol={{ span: 6 }}` `wrapperCol={{ span: 18 }}` to control label/input width ratio.
+**Use `Form.useForm()`** for `validateFields`, `setFieldsValue`, `resetFields`.
+
+---
+
+**Table**
+
+**Template:**
+```tsx
+<Table
+  columns={[
+    { title: '名称', dataIndex: 'name', key: 'name' },
+    { title: '操作', key: 'action', render: (_, r) => <Space><Button type="link">编辑</Button><Button type="link" danger>删除</Button></Space> },
+  ]}
+  dataSource={data}
+  rowKey="id"
+/>
+```
+
+**Required:** `columns` (each with `title`, `dataIndex`, `key`), `dataSource`, `rowKey`.
+**Default:** pagination is bottom-right. Use `pagination={false}` to hide. `scroll={{ x: 'max-content' }}` for horizontal overflow.
+
+---
+
+**Select / Radio.Group / Checkbox.Group**
+
+All are controlled: `value` + `onChange`.
+
+```tsx
+<Select value={val} onChange={setVal} options={[{ label: 'A', value: 1 }, { label: 'B', value: 2 }]} />
+
+<Radio.Group value={val} onChange={e => setVal(e.target.value)}>
+  <Radio value={1}>A</Radio>
+  <Radio value={2}>B</Radio>
+</Radio.Group>
+
+<Checkbox.Group value={vals} onChange={setVals} options={[{ label: 'A', value: 1 }, { label: 'B', value: 2 }]} />
+```
+
+---
 
 **Button**
-- Variants: `type="primary"` (main action), `default` (secondary), `dashed`, `text`, `link`.
-- Danger: `danger` prop for destructive actions.
-- Sizes: `size="large" | "middle" | "small"`.
-- Loading state: `loading` prop.
-- Group buttons with `<Space>` to get consistent gaps.
+
+`type="primary"` (main) / `default` (secondary) / `dashed` / `text` / `link`. `danger` for destructive. `loading` for async. Group with `<Space>`.
 
 ---
 
