@@ -108,6 +108,66 @@ Upload
 
 This principle applies to the entire Ant Design component system, not only the examples above.
 
+### Mandatory Component Mapping Table
+
+When you see any of the following elements in a design / prototype / requirement, you **MUST** use the corresponding Ant Design component. No exceptions.
+
+| Design element | Ant Design component |
+|---|---|
+| 按钮 / 提交 / 新增 / 保存 / 删除 / button | `Button` |
+| 输入框 / 文本框 / 名称 / 关键词 / input / text field | `Input` |
+| 搜索框 / 搜索 / 查询 / search | `Input.Search` |
+| 数字输入 / 数量 / number input | `InputNumber` |
+| 下拉选择 / 单选下拉 / select / dropdown | `Select` |
+| 多选下拉 / multi select | `Select mode="multiple"` |
+| 级联选择 / 省市区 / cascader | `Cascader` |
+| 树形选择 / tree select | `TreeSelect` |
+| **单选框 / 单选按钮组 / radio** | **`Radio` / `Radio.Group`** |
+| **复选框 / 多选框 / checkbox** | **`Checkbox` / `Checkbox.Group`** |
+| 开关 / 切换 / switch / toggle | `Switch` |
+| 滑块 / 滑杆 / slider | `Slider` |
+| 评分 / 星级 / rate / star | `Rate` |
+| 日期选择 / 日期 / date picker | `DatePicker` |
+| 日期范围 / 起止日期 / range picker | `RangePicker` |
+| 时间选择 / time picker | `TimePicker` |
+| 穿梭框 / 左右选择 / transfer | `Transfer` |
+| 上传 / 文件上传 / upload | `Upload` |
+| 表单 / 提交数据 / form | `Form` + `Form.Item` |
+| 表格 / 数据表 / 列表数据 / table / data grid | `Table` |
+| 标签 / 状态标签 / tag | `Tag` |
+| 徽标 / 红点 / 角标 / badge | `Badge` |
+| 头像 / avatar | `Avatar` |
+| 卡片 / card | `Card` |
+| 标签页 / 页签 / tabs | `Tabs` |
+| 折叠面板 / 手风琴 / collapse / accordion | `Collapse` |
+| 步骤条 / 步骤 / steps | `Steps` |
+| 面包屑 / breadcrumb | `Breadcrumb` |
+| 下拉菜单 / 菜单 / menu / dropdown | `Dropdown` + `Menu` |
+| 分页 / 页码 / pagination | `Pagination`（表格内优先用 Table pagination） |
+| 时间轴 / timeline | `Timeline` |
+| 树形结构 / 组织树 / tree | `Tree` |
+| 列表 / list | `List` |
+| 描述列表 / 详情字段 / descriptions | `Descriptions` |
+| 统计数值 / 数字卡片 / statistic | `Statistic` |
+| 进度条 / 进度 / progress | `Progress` |
+| 分割线 / divider | `Divider` |
+| **弹窗 / 对话框 / modal / dialog** | **`Modal`** |
+| 抽屉 / 侧边栏弹窗 / drawer | `Drawer` |
+| 气泡确认 / 删除确认 / popconfirm | `Popconfirm` |
+| 气泡卡片 / 悬浮卡片 / popover | `Popover` |
+| 文字提示 / 悬浮提示 / tooltip | `Tooltip` |
+| 警告提示 / alert | `Alert` |
+| 全局提示 / message / toast | `message` |
+| 通知提醒 / notification | `notification` |
+| 加载中 / 旋转加载 / spin / loading | `Spin` |
+| 骨架屏 / 占位加载 / skeleton | `Skeleton` |
+| 空状态 / 暂无数据 / empty | `Empty` |
+| 结果页 / 成功失败页 / result | `Result` |
+| 轮播 / 走马灯 / carousel | `Carousel` |
+| 日历 / calendar | `Calendar` |
+
+> If a design element is not in this table but Ant Design has a component for it, you still MUST use the Ant Design component. This table is a minimum enforcement list, not an exhaustive list.
+
 ---
 
 # 3. Ant Design Is the UI Foundation
@@ -207,6 +267,34 @@ Therefore:
 > **Component identity comes from Ant Design.**
 >
 > **Visual appearance comes from the design.**
+>
+> **Visual customization MUST be applied through Ant Design's theming / Design Token mechanism, not by hardcoding raw CSS values.**
+
+When adapting visuals, always prefer:
+
+```text
+Ant Design Design Token / theme variable
++
+design-specific value
+=
+customized component
+```
+
+Instead of:
+
+```text
+Ant Design component
++
+inline style / hardcoded CSS with raw values
+```
+
+Refer to the official Ant Design design specification:
+
+- Design values: https://ant.design/docs/spec/values
+- Colors: https://ant.design/docs/spec/colors
+- Typography: https://ant.design/docs/spec/font
+- Spacing / grid: https://ant.design/docs/spec/grid
+- Icons: https://ant.design/components/icon
 
 Do not allow Ant Design's default appearance to override clearly specified design requirements.
 
@@ -537,11 +625,31 @@ Identify:
 * error
 * info
 
-Apply them through the appropriate project/version-supported Ant Design theming or component styling mechanism.
+**Map every color to an Ant Design color token. Do not hardcode hex/rgb values directly.**
+
+| Design role | Ant Design 4.x (less variable) | Ant Design 5.x (Design Token) |
+|---|---|---|
+| 主色 / primary | `@primary-color` | `colorPrimary` |
+| 成功 / success | `@success-color` | `colorSuccess` |
+| 警告 / warning | `@warning-color` | `colorWarning` |
+| 错误 / error | `@error-color` | `colorError` |
+| 信息 / info | `@info-color` | `colorInfo` |
+| 主文字 | `@text-color` | `colorText` |
+| 次文字 | `@text-color-secondary` | `colorTextSecondary` |
+| 禁用文字 | `@disabled-color` | `colorTextDisabled` |
+| 边框 | `@border-color-base` | `colorBorder` |
+| 分割线 | `@border-color-split` | `colorBorderSecondary` |
+| 背景 | `@background-color-base` | `colorBgLayout` |
+| 组件背景 | `@component-background` | `colorBgContainer` |
+
+Apply them through the project's version-supported theming mechanism:
+
+- **Ant Design 4.x**: less variables (`@primary-color`), `ConfigProvider`, or `theme` option
+- **Ant Design 5.x**: `ConfigProvider` with `theme.token` / `theme.components`
 
 Do not globally modify the entire Ant Design theme merely to reproduce one component.
 
-Prefer the smallest appropriate scope.
+Prefer the smallest appropriate scope (component-level token > global token > raw CSS).
 
 ---
 
@@ -556,7 +664,25 @@ Preserve the design's:
 * letter spacing
 * hierarchy
 
-Use Ant Design Typography where appropriate.
+**Use Ant Design Typography components for text content.** Prefer:
+
+- `Typography.Title` (levels 1-5) for headings
+- `Typography.Text` for body text, with `type` (secondary / success / warning / danger) and `strong` / `disabled` / `mark` / `code` props
+- `Typography.Paragraph` for paragraphs, with `ellipsis` / `copyable`
+
+**Map font sizes to Ant Design's type scale.** Ant Design default font size阶梯:
+
+| Level | Size | Usage |
+|---|---|---|
+| 标题1 | 38px | page hero title |
+| 标题2 | 30px | section title |
+| 标题3 | 24px | card title |
+| 标题4 | 20px | subsection title |
+| 标题5 | 16px | small heading |
+| 正文 | 14px | body text (default) |
+| 辅助文字 | 12px | helper / caption |
+
+If the design uses a different size, preserve it but apply it through Ant Design's typography token (`@font-size-base` in 4.x / `fontSize` in 5.x) or the Typography component's `style`, not by replacing the component with raw `<div>`.
 
 Do not allow default typography to overwrite clearly specified design requirements.
 
@@ -575,6 +701,21 @@ Preserve meaningful values from the design:
 * row height
 * column width
 * container dimensions
+
+**Align spacing to Ant Design's 8px grid system.** Ant Design uses an 8px base unit; preferred spacing values are multiples of 8:
+
+```text
+4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64 ...
+```
+
+**Use Ant Design layout primitives for spacing instead of raw CSS margin/padding whenever possible:**
+
+- `Space` — for gaps between components (size: `small`=8, `middle`=16, `large`=24, or custom number)
+- `Row` / `Col` with `gutter` — for grid layouts
+- `Flex` — for flexbox layouts with `gap`
+- `Divider` — for section separators
+
+If the design specifies a spacing value that is not a multiple of 8, preserve the design value but note the deviation. Do not arbitrarily round it to 8 if it would break the design.
 
 Use responsive and reusable layout values where appropriate.
 
@@ -757,6 +898,21 @@ uploads
 
 according to what the design requires.
 
+### Component checklist — MUST output before delivering
+
+Before delivering any code, you MUST explicitly list every UI element you identified and which Ant Design component you used. Format:
+
+```text
+| Design element | Ant Design component used | Correct? |
+|---|---|---|
+| 单选框 | Radio.Group | ✅ |
+| 弹窗 | Modal | ✅ |
+| 搜索框 | Input.Search | ✅ |
+| ... | ... | ... |
+```
+
+If any row says "custom" or "native HTML" or is missing an Ant Design component, go back and fix it before delivering. Do not skip this checklist.
+
 ---
 
 # 25. Priority Rules
@@ -835,20 +991,22 @@ Design / Prototype / Screenshot / Figma / Requirement
 3. Understand page structure
 4. Identify page functionality
 5. Identify UI elements
-6. Determine semantic purpose
-7. Check whether Ant Design provides an appropriate component
-8. If YES → MUST use Ant Design
-9. If NO → custom implementation allowed
-10. Verify official API for the project version
-11. Build page using Ant Design as the foundation
-12. Apply design-specific visual styling
-13. Implement required interaction
-14. Validate component usage
-15. Validate API/version
-16. Validate visual fidelity
-17. Validate interaction
-18. Validate code
-19. Deliver final implementation
+6. Cross-check EVERY identified element against the Mandatory Component Mapping Table (Section 2) — if it's in the table, the mapped Ant Design component is NON-NEGOTIABLE
+7. Determine semantic purpose
+8. Check whether Ant Design provides an appropriate component
+9. If YES → MUST use Ant Design
+10. If NO → custom implementation allowed
+11. Verify official API for the project version
+12. Build page using Ant Design as the foundation
+13. Apply design-specific visual styling via Ant Design Design Token / theming mechanism
+14. Implement required interaction
+15. Validate component usage
+16. Validate API/version
+17. Validate visual fidelity (colors → tokens, typography → type scale, spacing → 8px grid)
+18. Validate interaction
+19. Validate code
+20. Output the component checklist (Section 24) — confirm every element maps to an Ant Design component; if any is custom/native, go back and fix it
+21. Deliver final implementation
 ```
 
 ---
