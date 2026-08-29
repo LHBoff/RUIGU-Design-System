@@ -170,13 +170,24 @@ When you see any of the following elements in a design / prototype / requirement
 
 ### High-Frequency Component Implementation Notes
 
+**Global principle for ALL components: Use Ant Design's default props and default visual structure. Do NOT manually add dividers, borders, spacing, or other elements that Ant Design already renders by default. If a default visual element is missing, you passed the wrong props — fix the props, do not patch with custom CSS.** If the design explicitly differs from Ant Design default, then customize via official props / tokens.
+
 These components have structural details that are easy to get wrong. Follow them exactly.
 
 **Modal / Drawer — dialogs**
 
-**Width (fixed px only):** 400 (confirm) / 520 (default) / 640 (form) / 800 (complex). Never use percentage.
+**Use Ant Design Modal's DEFAULT structure. Do NOT customize visual style.**
 
-**Standard template — copy this structure, do not omit the divider:**
+Ant Design Modal comes with built-in structure out of the box:
+- Header with `title` + close button, with a bottom divider line (border-bottom)
+- Body for content
+- Footer with `Cancel` (left, default) + `OK` (right, primary), with a top divider line (border-top, full-width)
+
+**If dividers are missing, you forgot to pass `title` or `onOk`/`onCancel`. Do NOT manually add `<Divider />` or custom borders — fix the props instead.**
+
+**Width (fixed px only):** 400 (confirm) / 520 (default) / 640 (form) / 800 (complex). Never percentage.
+
+**Standard template — use default props, no custom footer:**
 ```tsx
 <Modal
   title="弹窗标题"
@@ -188,36 +199,39 @@ These components have structural details that are easy to get wrong. Follow them
   width={520}
   destroyOnClose
   maskClosable={false}
-  footer={[
-    <Button key="cancel" onClick={() => setVisible(false)}>取消</Button>,
-    <Button key="ok" type="primary" onClick={handleOk}>确定</Button>,
-  ]}
 >
-  <div>body content here</div>
-  <Divider style={{ margin: '24px 0 0' }} />
+  {/* body content */}
 </Modal>
 ```
 
 **Form modal:**
 ```tsx
-<Modal title="编辑" open={visible} onCancel={...} onOk={form.submit} width={640} destroyOnClose maskClosable={false}
-  footer={[<Button key="cancel" onClick={...}>取消</Button>, <Button key="ok" type="primary" onClick={form.submit}>确定</Button>]}>
+<Modal
+  title="编辑"
+  open={visible}
+  onCancel={() => setVisible(false)}
+  onOk={form.submit}
+  width={640}
+  destroyOnClose
+  maskClosable={false}
+>
   <Form form={form} layout="vertical" onFinish={handleSubmit}>
     <Form.Item name="name" label="名称" rules={[{ required: true }]}>
       <Input placeholder="请输入" />
     </Form.Item>
   </Form>
-  <Divider style={{ margin: '24px 0 0' }} />
 </Modal>
 ```
 
-**Hard rules:**
-- Footer buttons MUST be right-aligned: `取消` (default) on left, `确定` (primary) on right.
-- Divider between body and footer MUST be explicitly rendered with `<Divider />` — do NOT rely on Ant Design's default footer border, it may be invisible in some themes.
-- Always use custom `footer` prop (as shown above) to guarantee button order and divider placement.
-- Always set `destroyOnClose` so form state resets.
-- Always set `maskClosable={false}` for form modals.
-- NEVER build modal with `<div>` + z-index. NEVER use `width="80%"`. NEVER put action buttons in body.
+**Rules:**
+- Always pass `title` — without it there is no header divider.
+- Always pass `onOk` + `onCancel` — without them there is no footer (and no footer divider).
+- Do NOT pass `footer={null}` for action modals (only pure-info modals may omit footer).
+- Do NOT pass custom `footer` unless the design explicitly requires non-standard buttons.
+- Do NOT manually add `<Divider />`, `<hr />`, or custom border CSS — Ant Design renders dividers automatically when props are correct.
+- Do NOT build modal with `<div>` + z-index. Always use `<Modal>`.
+- Do NOT use percentage width.
+- Always `destroyOnClose` + `maskClosable={false}` for forms.
 
 **Drawer:** same rules + `placement` ("right" default), `width` or `height`.
 
