@@ -173,11 +173,77 @@ When you see any of the following elements in a design / prototype / requirement
 These components have structural details that are easy to get wrong. Follow them exactly.
 
 **Modal / Drawer — dialogs**
-- Always control with `open` (or `visible` in 4.x) + `onCancel` / `onClose`. Never render uncontrolled.
-- **Footer buttons**: default footer renders `Cancel` (left, default) + `OK` (right, primary). If the design has custom buttons or a different order, pass `footer={<Space><Button>自定义</Button><Button type="primary">确定</Button></Space>}`. Buttons inside footer are right-aligned by default.
-- **Divider between body and footer**: Ant Design Modal already has a visual separator via footer's top border. If the design shows an explicit line, add `<Divider />` at the end of the modal body content.
-- Key props: `title`, `width`, `centered`, `maskClosable={false}` for forms, `destroyOnClose`.
-- Drawer adds `placement` ("right" by default).
+
+**Size spec (width):**
+- Small: `400px` — confirm / alert
+- Default: `520px` — general purpose
+- Medium: `640px` — forms with 1-2 columns
+- Large: `800px` — complex forms / data preview
+- Do NOT use percentage widths or `width="100%"`. Use fixed px values from above.
+
+**Standard structure — ALWAYS follow this layout:**
+```
+┌─────────────────────────────────────┐
+│  Title (bold, 16px)            [X]  │  ← header (antd default)
+├─────────────────────────────────────┤
+│                                     │
+│  Body content (scrollable if long)  │  ← children
+│                                     │
+├─────────────────────────────────────┤  ← border-top (antd default)
+│              [Cancel] [OK]          │  ← footer, right-aligned
+└─────────────────────────────────────┘
+```
+
+**Standard template — use this exact structure:**
+```tsx
+<Modal
+  title="弹窗标题"
+  open={visible}
+  onCancel={() => setVisible(false)}
+  onOk={handleOk}
+  okText="确定"
+  cancelText="取消"
+  width={520}
+  destroyOnClose
+  maskClosable={false}
+>
+  {/* body content here */}
+</Modal>
+```
+
+**Form modal template:**
+```tsx
+<Modal title="编辑" open={visible} onCancel={...} onOk={form.submit} width={640} destroyOnClose maskClosable={false}>
+  <Form form={form} layout="vertical" onFinish={handleSubmit}>
+    <Form.Item name="name" label="名称" rules={[{ required: true }]}>
+      <Input placeholder="请输入" />
+    </Form.Item>
+    {/* more fields */}
+  </Form>
+</Modal>
+```
+
+**Footer rules:**
+- Default footer: `Cancel` (left, default type) + `OK` (right, primary type), right-aligned.
+- Custom buttons: pass `footer={<Space><Button onClick={...}>自定义</Button><Button type="primary" onClick={...}>确定</Button></Space>}`.
+- NEVER left-align footer buttons unless the design explicitly requires it.
+- NEVER omit the footer for action modals (only info/preview modals may use `footer={null}`).
+
+**Divider:**
+- Ant Design Modal already has a top border on the footer area — this is the default separator.
+- If the design shows an explicit divider line inside the body (above footer), add `<Divider />` at the end of body content.
+- Do NOT add extra `<hr />` or custom border divs.
+
+**Key props:** `title`, `width` (fixed px), `open`/`visible`, `onCancel`, `onOk`, `okText`, `cancelText`, `destroyOnClose`, `maskClosable={false}` for forms, `centered` for short modals.
+
+**NEVER do this:**
+- Do NOT build a modal with `<div>` + custom CSS + z-index. Always use `<Modal>`.
+- Do NOT use `width="80%"` or `width="100vw"`. Use fixed px.
+- Do NOT put action buttons inside the body instead of footer.
+- Do NOT change the footer text alignment to left/center unless the design explicitly shows it.
+- Do NOT forget `destroyOnClose` — form state must reset on close.
+
+**Drawer:** same rules, plus `placement` ("right" by default), `width` for left/right or `height` for top/bottom.
 
 **Table — data grid**
 - Must have `columns` (each: `title`, `dataIndex`, `key`) and `dataSource`.
