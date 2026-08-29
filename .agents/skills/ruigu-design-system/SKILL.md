@@ -1,8 +1,7 @@
 ---
 name: ruigu-design-system
-description: Build interfaces with Ant Design as the primary UI component system. Analyze designs and prototypes, use the project's installed Ant Design version and official APIs, customize Ant Design components to match the design, and create custom components only when no suitable Ant Design component exists.
+description: 根据原型/设计稿/自然语言命令自动识别所需 UI 组件，始终以项目实际安装的 Ant Design 版本为实现基础：有对应组件必须使用 Ant Design，无对应组件才自定义，并按设计稿进行视觉样式定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists, and visually customize components to match the design.
 ---
-
 
 # RUIGU Design System
 
@@ -251,6 +250,18 @@ Never mix APIs from different major versions.
 Never silently upgrade or downgrade the project's Ant Design dependency.
 
 If the project has no Ant Design dependency, use the appropriate current official Ant Design version for the project environment unless the user specifies otherwise.
+
+**When there is no project context (e.g. converting a Figma design / screenshot / prototype directly to code with no codebase):**
+
+> Default output MUST be **React + TypeScript + Ant Design**.
+
+Do not fall back to native HTML / CSS / custom JSX components. Every standard UI element MUST be rendered as an Ant Design component with an explicit `import` from `antd`, for example:
+
+```tsx
+import { Button, Input, Select, Table, Form, Modal } from 'antd';
+```
+
+Use the latest stable Ant Design version unless the user specifies otherwise. If the user later provides a project, re-align to that project's installed version.
 
 Official source:
 
@@ -659,6 +670,8 @@ Generated code must be:
 * free of invented Ant Design APIs
 * free of unnecessary dependencies
 
+**Every standard UI element MUST be imported from `antd`.** Before delivering, confirm that the code contains `import { ... } from 'antd'` and that each button / input / select / table / modal / form etc. is an Ant Design component, not a native `<button>` / `<input>` / custom div.
+
 Do not leave critical functionality as pseudocode.
 
 Do not leave obvious placeholder UI where implementation is expected.
@@ -817,6 +830,8 @@ Design / Prototype / Screenshot / Figma / Requirement
 
 1. Inspect project
 2. Detect installed Ant Design version
+   ├─ If project exists → use its installed antd version
+   └─ If no project (pure Figma / screenshot / prototype) → default to React + TypeScript + latest stable Ant Design, MUST import from 'antd'
 3. Understand page structure
 4. Identify page functionality
 5. Identify UI elements
@@ -835,6 +850,8 @@ Design / Prototype / Screenshot / Figma / Requirement
 18. Validate code
 19. Deliver final implementation
 ```
+
+---
 
 # 28. Ultimate Rule
 
@@ -855,3 +872,23 @@ If the Ant Design component does not visually match the design:
 The goal is not to make a page that merely looks like Ant Design.
 
 The goal is to build the page **with Ant Design as its foundational UI component system**, while using the supplied design as the source of content, layout, visual customization, and interaction requirements.
+
+---
+
+# 29. Reference Files
+
+This skill bundles detailed reference documents. Read them when you need deeper guidance:
+
+### Core decision files — read first when selecting page structure or components
+
+- `core/component-mapping.md` — how to recognize user intent and map UI elements to the correct Ant Design component (do not map words blindly).
+- `core/page-patterns.md` — page-level patterns (List / Detail / Form / Dashboard etc.) to identify before composing components.
+- `core/ant-design-rules.md` — Ant Design usage rules and conventions to follow.
+
+### Component references — read when implementing a specific component
+
+- `components/button.md` — Button variants, props, and usage.
+- `components/input.md` — Input / Input.Search usage.
+- `components/select.md` — Select usage.
+- `components/table.md` — Table columns, sorting, filtering, pagination.
+- `api/button-api.md` — Button API reference.
