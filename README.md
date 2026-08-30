@@ -1,5 +1,5 @@
 # RUIGU-Design-System
-RUIGU Design System（锐锢中台组件库）是一套基于 Ant Design 4.x 的 AI UI Design System Skill，帮助 AI 理解中英文自然语言需求、选择合适的 UI 组件与页面模式，并辅助生成规范化的 UI 设计与 React + TypeScript 代码。
+RUIGU Design System（锐锢中台组件库）是一套基于 Ant Design 的 AI UI Design System Skill，帮助 AI 理解中英文自然语言需求、选择合适的 UI 组件与页面模式，并辅助生成规范化的 UI 设计与 React + TypeScript 代码。
 
 ---
 
@@ -24,7 +24,7 @@ RUIGU Design System（锐锢中台组件库）是一套基于 Ant Design 4.x 的
 
 可以要求 AI：
 
-* 生成 React + TypeScript + Ant Design 4.x 页面
+* 生成 React + TypeScript + Ant Design 页面
 * 根据需求选择组件
 * 根据业务语义配置组件
 * 检查组件 API
@@ -70,13 +70,13 @@ Mixed
 
 Base Design System:
 
-Ant Design 4.x
+Ant Design
 
 Default development stack:
 
 * React
 * TypeScript
-* Ant Design 4.x
+* Ant Design
 
 ---
 
