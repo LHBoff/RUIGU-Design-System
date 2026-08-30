@@ -1,4 +1,3 @@
-
 ---
 name: ruigu-design-system
 description: 根据原型/设计稿/自然语言命令自动识别所需 UI 组件，始终以项目实际安装的 Ant Design 版本为实现基础：有对应组件必须使用 Ant Design，无对应组件才自定义，并按设计稿进行视觉样式定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists, and visually customize components to match the design.
@@ -14,7 +13,9 @@ Its primary purpose is to build interfaces **on top of Ant Design**, not to crea
 
 The fundamental rule is:
 
-> **Ant Design is the foundation. The design is the customization reference.**
+> **Ant Design is the foundation. Default Ant Design style is the baseline. Only customize when the design explicitly differs from default.**
+
+**DEFAULT FIRST:** Use Ant Design components with their default props and default blue theme. Do NOT proactively change colors, layout, spacing, or typography. Only deviate from default when the design clearly requires it.
 
 When converting a design into code:
 
@@ -34,7 +35,7 @@ Design / Prototype / Screenshot
  ↓                      ↓
 Ant Design component   Custom implementation
  ↓
-Apply design-specific styling
+Use default style (only customize if design differs)
             ↓
       Build final page
 ```
@@ -358,65 +359,27 @@ Do NOT create a new custom button simply because the visual design differs.
 
 # 5. Visual Customization
 
-Ant Design components MUST be visually adapted to the supplied design when necessary.
+**DEFAULT FIRST. Use Ant Design's default visual style (blue theme, default spacing, default typography) unless the design explicitly specifies something different.**
 
-Example:
+Do NOT proactively change colors, fonts, spacing, or theme. Do NOT add `ConfigProvider` with custom theme tokens. Do NOT set `@primary-color` or `colorPrimary` to a custom value.
 
-```text
-Design:
-blue button
-8px radius
-44px height
-specific typography
-
-Implementation:
-
-Ant Design Button
-+
-design-specific color
-+
-design-specific radius
-+
-design-specific height
-+
-design-specific typography
-```
-
-Therefore:
+Only customize when the design clearly shows a different value. In that case:
 
 > **Component identity comes from Ant Design.**
 >
-> **Visual appearance comes from the design.**
->
-> **Visual customization MUST be applied through Ant Design's theming / Design Token mechanism, not by hardcoding raw CSS values.**
-
-When adapting visuals, always prefer:
+> **Visual differences come from the design, applied via Ant Design's official theming / Design Token mechanism.**
 
 ```text
-Ant Design Design Token / theme variable
+Ant Design component (default blue)
 +
-design-specific value
+design-specific token override (only if design differs from default)
 =
-customized component
+final implementation
 ```
 
-Instead of:
+Never hardcode raw CSS values. Use official props or Design Tokens.
 
-```text
-Ant Design component
-+
-inline style / hardcoded CSS with raw values
-```
-
-Refer to the official Ant Design design specification:
-
-- Design values: https://ant.design/docs/spec/values
-- Colors: https://ant.design/docs/spec/colors
-- Typography: https://ant.design/docs/spec/font
-- Spacing / grid: https://ant.design/docs/spec/grid
-- Icons: https://ant.design/components/icon
-
-Do not allow Ant Design's default appearance to override clearly specified design requirements.
+Official design spec: https://ant.design/docs/spec/values
 
 ---
 
@@ -725,51 +688,21 @@ Customize their visual appearance to match the design.
 
 # 15. Colors
 
-For Ant Design components:
+**DEFAULT: Ant Design blue theme (#1677ff in 5.x, #1890ff in 4.x). Do NOT change primary color unless the design explicitly specifies a different brand color.**
 
-**the design's colors take precedence over Ant Design's default visual colors.**
+Do NOT add `ConfigProvider` with custom `theme.token.colorPrimary`. Do NOT set `@primary-color` to a custom value. Do NOT add global theme configuration.
 
-Identify:
+Only when the design explicitly shows a different primary color, map it to the correct token:
 
-* primary color
-* secondary color
-* background
-* surface
-* border
-* divider
-* text
-* secondary text
-* disabled text
-* success
-* warning
-* error
-* info
-
-**Map every color to an Ant Design color token. Do not hardcode hex/rgb values directly.**
-
-| Design role | Ant Design 4.x (less variable) | Ant Design 5.x (Design Token) |
+| Design role | Ant Design 4.x | Ant Design 5.x |
 |---|---|---|
 | 主色 / primary | `@primary-color` | `colorPrimary` |
 | 成功 / success | `@success-color` | `colorSuccess` |
 | 警告 / warning | `@warning-color` | `colorWarning` |
 | 错误 / error | `@error-color` | `colorError` |
 | 信息 / info | `@info-color` | `colorInfo` |
-| 主文字 | `@text-color` | `colorText` |
-| 次文字 | `@text-color-secondary` | `colorTextSecondary` |
-| 禁用文字 | `@disabled-color` | `colorTextDisabled` |
-| 边框 | `@border-color-base` | `colorBorder` |
-| 分割线 | `@border-color-split` | `colorBorderSecondary` |
-| 背景 | `@background-color-base` | `colorBgLayout` |
-| 组件背景 | `@component-background` | `colorBgContainer` |
 
-Apply them through the project's version-supported theming mechanism:
-
-- **Ant Design 4.x**: less variables (`@primary-color`), `ConfigProvider`, or `theme` option
-- **Ant Design 5.x**: `ConfigProvider` with `theme.token` / `theme.components`
-
-Do not globally modify the entire Ant Design theme merely to reproduce one component.
-
-Prefer the smallest appropriate scope (component-level token > global token > raw CSS).
+Apply via `ConfigProvider` (5.x: `theme.token`, 4.x: less variables). Only override tokens that differ from default. Never hardcode hex values in component styles.
 
 ---
 
@@ -1103,11 +1036,11 @@ Design / Prototype / Screenshot / Figma / Requirement
 10. If NO → custom implementation allowed
 11. Verify official API for the project version
 12. Build page using Ant Design as the foundation
-13. Apply design-specific visual styling via Ant Design Design Token / theming mechanism
+13. Apply design-specific visual styling ONLY if design differs from default (via official tokens, not raw CSS)
 14. Implement required interaction
 15. Validate component usage
 16. Validate API/version
-17. Validate visual fidelity (colors → tokens, typography → type scale, spacing → 8px grid)
+17. Validate visual fidelity
 18. Validate interaction
 19. Validate code
 20. Deliver final implementation
