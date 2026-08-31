@@ -113,7 +113,7 @@ Analyze:
 Do not immediately convert every visible rectangle
 into a custom HTML element.
 
-**Visual Mode（模式前提）：** 以上分析用于理解**结构与功能**。在默认的组件规范优先模式下，`visual hierarchy` 仅用于确定布局层级（如哪部分更重要、放前面），**不**转化为颜色 / 字号 / 圆角 / 阴影等视觉定制——最终视觉一律用 Ant Design 默认规范。
+**Visual Mode（模式前提，见 SKILL.md 第 2、12 节）：** 以上分析用于理解**内容与功能**。在默认的组件规范优先模式下，`visual hierarchy` 仅用于判断信息主次（哪部分更重要、放前面），**不**转化为视觉定制，也**不**转化为结构布局——页面结构按 Ant Design 页面模式规范（SKILL.md 第 12.3 节）组织，视觉用 Ant Design 默认规范；原型图的排布方式（如筛选区上下单列、单列布局、分组方式）一律不照搬。仅视觉参考模式（设计稿/高保真）才采用图片的布局与视觉。
 
 ---
 
@@ -534,6 +534,8 @@ absolute positioning to reproduce a screenshot.
 The generated page should remain responsive
 and structurally maintainable.
 
+**Visual Mode（模式前提，见 SKILL.md 第 2、12 节）：** 默认组件规范优先模式下，布局按 Ant Design 页面结构规范（SKILL.md 第 12.3 节）组织，不照搬原型图的排布方式（上下/左右、单列、分组、栅格分配）；查询区遵循"一行最多 3 个筛选/输入框"。仅视觉参考模式（设计稿/高保真）才采用图片布局。
+
 ---
 
 # 17. Form Generation
@@ -627,6 +629,12 @@ Example:
     </Button>
   </Form.Item>
 </Form>
+
+**查询区布局规则（强制，见 SKILL.md 第 12.3.1 节）：**
+- **一行最多展示 3 个筛选/输入框**；> 3 个自动换行，每行最多 3 个；
+- 查询、重置按钮紧跟最后一个筛选项之后；
+- 用 `Form layout="inline"` 或 grid 组织，不手工拼 div。
+- **Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 默认组件规范优先模式下，即使原型图把筛选项画成上下单列，也一律改为水平多列规范；仅视觉参考模式（设计稿/高保真）保留图片布局。
 
 ---
 
