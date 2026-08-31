@@ -1,6 +1,6 @@
 ---
 name: ruigu-design-system
-description: 根据原型/设计稿/自然语言命令自动识别所需 UI 组件，始终以项目实际安装的 Ant Design 版本为实现基础：有对应组件必须使用 Ant Design，无对应组件才自定义，并按设计稿进行视觉样式定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists, and visually customize components to match the design.
+description: 锐锢中台组件库，基于项目实际安装版本的 Ant Design 构建。根据原型、设计稿或自然语言需求自动匹配并使用锐锢中台组件，优先复用已有组件，无对应组件时才进行扩展或自定义，并遵循锐锢设计规范完成视觉样式定制。
 ---
 
 # RUIGU Design System
