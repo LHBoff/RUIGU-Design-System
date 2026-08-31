@@ -46,6 +46,8 @@ RUIGU must understand:
 
 Semantic intent has higher priority than literal keywords.
 
+**Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 组件识别始终基于语义目的、交互、内容、上下文与状态，**不基于外观**。默认组件规范优先模式下，图片的视觉（颜色、圆角、阴影等）不参与组件选择，也不参与最终视觉定制；仅当指令含"设计稿/设计图/高保真"等指向性文案（视觉参考模式）时，图片视觉才影响定制。
+
 ---
 
 # 2. Component Decision Matrix
@@ -757,6 +759,8 @@ Input
 Select
 Button
 Button
+
+**Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 图片分析用于识别组件类型与页面结构；识别依据是语义 / 功能 / 交互 / 上下文，不是外观照抄。默认组件规范优先模式下，图片中的颜色、圆角、阴影等视觉不进入最终实现，一律使用 Ant Design 默认样式。
 
 ---
 
