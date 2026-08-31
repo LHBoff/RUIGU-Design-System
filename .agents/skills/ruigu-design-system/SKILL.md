@@ -1,6 +1,6 @@
 ---
 name: ruigu-design-system
-description: 锐锢中台组件库，基于项目实际安装版本的 Ant Design 构建。根据原型、设计稿或自然语言需求自动匹配并使用锐锢中台组件，优先复用已有组件，无对应组件时才进行扩展或自定义，并遵循锐锢设计规范完成视觉样式定制。
+description: 锐锢中台组件库，基于项目实际安装版本的 Ant Design 构建。根据原型、设计稿或自然语言需求自动匹配并使用锐锢中台组件，优先复用已有组件，无对应组件时才进行扩展或自定义，并遵循锐锢设计规范完成视觉样式定制。默认按组件库规范（Ant Design 默认样式）生成页面，图片视觉不参与实现；仅当识别到「设计稿/设计图」等指向性文案时，才参考图片视觉进行定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists. By default, build with the Ant Design component library's standard style; only reference the visual style of an uploaded image when explicit visual-reference wording (e.g. "design draft / design image") is detected.
 ---
 # RUIGU Design System
 ## 1. Core Mission
@@ -34,9 +34,9 @@ Design / Prototype / Screenshot / Natural-language command
  ↓                      ↓
 Ant Design component   Custom implementation
  ↓
-Apply visual per mode:
- ├─ Component-First Mode → Ant Design 默认样式，忽略图片视觉
- └─ Visual-Reference Mode → 按图片视觉经官方 Token 定制（仅不同处）
+Apply structure & visual per mode:
+ ├─ Component-First Mode → 结构按第 12 节规范组织 + Ant Design 默认样式，忽略图片布局与视觉
+ └─ Visual-Reference Mode → 采用图片布局 + 按图片视觉经官方 Token 定制（仅不同处）
             ↓
       Build final page
 ```
@@ -44,35 +44,44 @@ Apply visual per mode:
 # 2. Visual Mode — Component-First by Default（视觉模式判定）
 
 ## 2.1 核心原则
-> **模式判定先行：在分析任何输入之前，必须先判定视觉模式。默认组件规范优先，视觉参考仅在明确触发时启用。**
+> **模式判定先行：在分析任何输入之前，必须先判定模式。默认组件规范优先——结构与视觉均按 Ant Design 规范，图片参考仅在明确触发时启用。**
 
-Ant Design 组件体系是本 Skill 的唯一实现基础（第 3 节）；而"输入图片的视觉样式是否参与实现"由本节模式决定：
+Ant Design 组件体系是本 Skill 的唯一实现基础（第 3 节）。输入图片存在两种"参考维度"，由模式分别决定是否采用：
 
-- **默认（组件规范优先模式 Component-First Mode）**：上传的图片（原型图 / 设计图 / 截图 / wireframe / 手绘稿）只作为 **结构、内容、功能、交互、层级** 的参考。图片中的视觉样式——颜色、字体、圆角、阴影、背景、间距、边框、图标风格、形状装饰等——**一律忽略**，页面完全使用 Ant Design 默认规范实现。
-- **仅当检测到指向性文案（视觉参考模式 Visual-Reference Mode）**：图片才同时作为 **视觉** 参考，在 Ant Design 组件基础上按图片视觉定制样式。
+| 参考维度 | 含义 | 组件规范优先（默认） | 视觉参考（仅触发） |
+|---|---|---|---|
+| **内容维度** | 有哪些字段、操作、数据、状态、文案 | ✅ 提取 | ✅ 提取 |
+| **结构维度** | 如何排布：上下/左右、分组、每行几个、区域分配 | ❌ 不采用，按第 12 节规范重新组织 | ✅ 采用图片布局 |
+| **视觉维度** | 颜色、字体、圆角、阴影、背景、间距、图标风格 | ❌ 一律忽略 | ✅ 参考定制 |
+
+- **默认（组件规范优先模式 Component-First Mode）**：上传的图片（原型图 / 设计图 / 截图 / wireframe / 手绘稿）只作为 **内容、功能、交互、数据字段** 的参考。图片中的**结构布局**（如筛选区上下排列、单列布局、分组方式）与**视觉样式**（颜色、字体、圆角、阴影、背景、间距、边框、图标风格）均**不采用**——页面结构与视觉一律按 Ant Design 默认规范实现。
+- **仅当检测到指向性文案（视觉参考模式 Visual-Reference Mode）**：图片才同时作为 **结构布局 + 视觉** 参考，在 Ant Design 组件基础上采用图片布局并定制视觉。
 
 **关键判定原则：**
-> 图片视觉是否构成"设计明确要求"（第 1、6 节），由**模式**决定，而不是由图片本身决定。默认模式下，即使图片视觉与 Ant Design 默认明显不同（例如红色按钮、圆角卡片、自定义配色），也**不**构成定制依据，必须使用 Ant Design 默认样式。
+> 图片的视觉与结构是否构成"设计明确要求"（第 1、6、12 节），由**模式**决定，而不是由图片本身决定。默认模式下，即使图片中的布局或视觉与 Ant Design 默认明显不同（例如筛选区上下布局、红色按钮、圆角卡片、自定义配色），也**不**构成实现依据，必须使用 Ant Design 默认结构与默认样式。
 
 ## 2.2 两种模式
 
 ### 模式 A：组件规范优先（Component-First Mode）— 默认
 - **适用**：绝大多数情况——用户上传原型图/设计图/截图、或仅给出自然语言需求，且未明确要求参考视觉。
-- **图片角色**：结构 + 内容 + 功能 + 交互 + 层级参考；**视觉零参考**。
+- **图片角色**：内容 + 功能 + 交互 + 数据字段参考；**结构布局与视觉零参考**。
 - **实现策略**：
-  1. 页面结构、内容文案、功能交互、布局层级取自图片/需求；
-  2. 视觉一律 Ant Design 默认：默认蓝色主色（5.x `#1677ff` / 4.x `#1890ff`）、8px 间距网格、默认字号/字重/行高、默认圆角/边框/阴影、默认图标；
-  3. **禁止**因图片视觉添加任何定制：禁止 `ConfigProvider` 主题覆盖、禁止自定义 `colorPrimary`、禁止硬编码颜色/圆角/阴影/背景、禁止引入非默认间距（除非需求**文字**明确指定具体尺寸）；
-  4. 组件类型识别只依据**语义/功能/交互/上下文**（第 10 节），不依据外观——图片上控件长得像什么不影响组件选择。
-- **示例**：图片中出现红色按钮、圆角卡片、自定义配色 → 仍使用 Ant Design `Button type="primary"`（默认蓝）、`Card`（默认圆角/边框）、默认主题，不参考其视觉。
+  1. 内容文案、功能交互、数据字段取自图片/需求；
+  2. **页面结构与布局按 Ant Design 页面模式规范（第 12 节）重新组织**，不照搬原型图结构——上下布局、单列排列、分组方式、栅格分配、区域划分等结构样式一律不采用；
+  3. 视觉一律 Ant Design 默认：默认蓝色主色（5.x `#1677ff` / 4.x `#1890ff`）、8px 间距网格、默认字号/字重/行高、默认圆角/边框/阴影、默认图标；
+  4. **禁止**因图片视觉添加任何定制：禁止 `ConfigProvider` 主题覆盖、禁止自定义 `colorPrimary`、禁止硬编码颜色/圆角/阴影/背景、禁止引入非默认间距（除非需求**文字**明确指定具体尺寸）；
+  5. 组件类型识别只依据**语义/功能/交互/上下文**（第 10 节），不依据外观——图片上控件长得像什么不影响组件选择。
+- **示例 1（视觉）**：图片中出现红色按钮、圆角卡片、自定义配色 → 仍使用 Ant Design `Button type="primary"`（默认蓝）、`Card`（默认圆角/边框）、默认主题，不参考其视觉。
+- **示例 2（结构）**：原型图中筛选区为"上面标题、下面一个选择框"的上下布局 → 默认模式改为 Ant Design 查询区规范：一行最多 3 个筛选/输入框的水平排布（见第 12 节），标题按页面标题层级置于页面顶部，不保留原型图的上下结构。
 
 ### 模式 B：视觉参考（Visual-Reference Mode）— 仅当明确触发
-- **适用**：检测到指向性文案（见 2.3），用户明确要求参考图片视觉。
-- **图片角色**：结构 + 内容 + 功能 + 交互 + 层级 + **视觉** 参考。
+- **适用**：检测到指向性文案（见 2.3），用户明确要求参考图片（设计稿/高保真 UI 图）的布局与视觉。
+- **图片角色**：内容 + 功能 + 交互 + 数据字段 + **结构布局** + **视觉** 参考。
 - **实现策略**：
-  1. 仍以 Ant Design 组件为唯一实现基础（不得因视觉差异换成自定义组件，见第 4、6 节）；
-  2. 视觉差异通过 Ant Design 官方机制定制（5.x `ConfigProvider theme.token` / 官方组件 prop / 4.x less 变量），禁止裸 CSS 硬编码；
-  3. 仅定制图片中 **明确可见且与 Ant Design 默认不同** 的视觉属性；其余保持默认。
+  1. 页面**结构/布局按图片所示采用**（设计稿/高保真图的区域划分、排布方式、分组方式被保留）；
+  2. 仍以 Ant Design 组件为唯一实现基础（不得因视觉差异换成自定义组件，见第 4、6 节）；
+  3. 视觉差异通过 Ant Design 官方机制定制（5.x `ConfigProvider theme.token` / 官方组件 prop / 4.x less 变量），禁止裸 CSS 硬编码；
+  4. 仅定制图片中 **明确可见且与 Ant Design 默认不同** 的视觉属性；其余保持默认。
 
 ## 2.3 判定规则（何时启用视觉参考）
 按以下顺序判定，**取第一个命中的结论**：
@@ -101,10 +110,10 @@ Ant Design 组件体系是本 Skill 的唯一实现基础（第 3 节）；而"�
 ## 2.4 模式声明（便于设计验证）
 每次实现都必须在交付物中显式声明当前模式，例如代码顶部注释：
 ```tsx
-// Visual Mode: Component-First (default) — 图片仅作结构与内容参考，视觉采用 Ant Design 默认规范
-// Visual Mode: Visual-Reference — 已按图片视觉定制（触发依据：指令含"设计稿"）
+// Visual Mode: Component-First (default) — 图片仅作内容/功能参考；结构与视觉均采用 Ant Design 默认规范
+// Visual Mode: Visual-Reference — 已按图片布局与视觉定制（触发依据：指令含"设计稿/高保真"）
 ```
-该声明用于设计验证阶段快速定位"是否误参考了图片视觉"，也是第 25 节模式一致性验证的依据。
+该声明用于设计验证阶段快速定位"是否误参考了图片的视觉或结构"，也是第 25 节模式一致性验证的依据。
 
 ---
 # 3. Non-Negotiable Ant Design First Rule
@@ -484,8 +493,9 @@ Do not create one large custom component when the design can be naturally compos
 Use Ant Design composition wherever appropriate.
 ---
 # 12. Page Structure
+## 12.1 结构识别
 Analyze the design before implementation.
-Identify:
+Identify（从图片/需求中识别页面包含哪些内容区域与元素）:
 * page shell
 * header
 * navigation
@@ -504,6 +514,56 @@ Identify:
 * pagination
 * empty states
 * loading states
+
+## 12.2 结构生成规则（Structure Generation）
+**结构由"内容清单 × Ant Design 页面模式规范"决定，不由图片布局决定。**
+
+- **组件规范优先模式（默认）**：
+  1. 先从图片/需求中提取**内容清单**——页面包含哪些字段、筛选条件、操作按钮、数据区、状态等；
+  2. 依据内容清单匹配页面模式（List / Detail / Form / Dashboard 等，见 `core/page-patterns.md`）；
+  3. 按 Ant Design 标准页面结构（见 12.3）与页面模式模板组织布局；
+  4. **不采用**原型图中的结构样式——上下布局、单列排列、分组方式、栅格分配、区域划分、元素的相对位置等均不照搬。
+- **视觉参考模式（仅触发）**：结构/布局按图片所示采用（设计稿/高保真 UI 图的排布被保留），但组件仍用 Ant Design。
+
+## 12.3 Ant Design 标准页面结构规范
+默认模式下，按以下 Ant Design 通用结构生成（各页面模式的具体模板见 `core/page-patterns.md`）：
+
+```text
+页面顶部
+├── Breadcrumb 面包屑
+├── Typography.Title 页面标题
+│
+查询区（表格/列表上方，Ant Design 查询表单规范）
+├── Form 组织筛选条件
+├── 一行最多 3 个筛选/输入框（第 12.3.1 条，强制）
+├── 超过 3 个自动换行，每行最多 3 个
+├── 末尾：查询(primary) + 重置(default) 按钮
+│
+操作区（表格右上角 / 查询区同行右侧）
+├── 新增(primary)、导入、导出、批量删除(danger) 等主操作
+│
+数据区
+├── Table 主体（含分页，默认右下角）
+│
+弹层
+├── Modal / Drawer 承载新增、编辑、详情等
+```
+
+### 12.3.1 查询区布局（强制规则）
+> **表格/列表上方的查询区，一行最多展示 3 个筛选/输入框。**
+- 筛选/输入框数量 ≤ 3 → 全部放在同一行；
+- 数量 > 3 → 自动换行，**每行最多 3 个**；
+- 查询、重置按钮紧跟在最后一个筛选项之后（可同行末尾或另起一行，视剩余空间）；
+- 用 Ant Design `Form`（`layout="inline"` 或 grid 布局）组织筛选条件，不使用自定义 div 手工拼排。
+
+示例（3 个筛选项 → 一行；5 个筛选项 → 两行，第一行 3 个、第二行 2 个 + 按钮）：
+```text
+[供应商名称____] [状态 ▼] [类型 ▼]     [查询][重置]      ← 3 个，一行
+[供应商名称____] [状态 ▼] [类型 ▼]                       ← 第 1 行（3 个）
+[创建时间____]   [负责人 ▼]        [查询][重置]           ← 第 2 行（2 个 + 按钮）
+```
+- 此规则同样适用于筛选条件由**原型图**提供的情况：原型图若把筛选项画成"上下单列"，默认模式一律改为上述水平多列规范；仅视觉参考模式（设计稿/高保真）保留图片布局。
+
 Then construct the page primarily from Ant Design components.
 ---
 # 13. Layout
@@ -518,6 +578,8 @@ Prefer the project's supported version of:
 * Divider
 Do not replace standard Ant Design layout capabilities with unnecessary custom layout components.
 Use CSS when necessary to achieve the design.
+
+**模式前提（见第 2、12 节）：** 默认组件规范优先模式下，布局按 Ant Design 页面结构规范（第 12.3 节）组织，**不照搬原型图的排布方式**（上下/左右、单列、分组等）。仅视觉参考模式下才采用图片的布局结构。
 ---
 # 14. Interaction
 If the design implies interaction, implement it.
@@ -725,7 +787,7 @@ All Ant Design imports are valid.
 All APIs match the installed version.
 No major-version APIs are mixed.
 ```
-### Mode validation（模式一致性验证 — 核心防视觉干扰检查）
+### Mode validation（模式一致性验证 — 核心防视觉/结构干扰检查）
 先确认本次实现处于哪个模式（见第 2 节 2.4 模式声明）：
 ```text
 组件规范优先模式（默认）→
@@ -733,11 +795,15 @@ No major-version APIs are mixed.
       非默认颜色 / 自定义圆角 / 自定义阴影 / 自定义背景 / 自定义字体 /
       非 8px 网格间距 / 图片上的图标风格 / 图片装饰形状
   - 检查是否因图片视觉添加了 ConfigProvider 主题 / colorPrimary 覆盖 / 硬编码色值
-  - 如有任一残留 → 移除，恢复 Ant Design 默认样式
+  - 检查产物是否残留输入图片的结构布局：
+      上下单列排布 / 非规范分组 / 筛选区每行超过 3 个 / 区域划分照搬原型图
+  - 检查查询区是否遵循"一行最多 3 个筛选/输入框"（第 12.3.1 节）
+  - 如有任一残留 → 移除，恢复 Ant Design 默认结构（第 12.3 节）与默认样式
 视觉参考模式 → 逐个检查：
   - 每个视觉定制是否有明确的图片依据
   - 是否通过官方 Token / 官方 prop 实现（非裸 CSS 硬编码）
   - 是否仍以 Ant Design 组件为基础（未换自定义组件）
+  - 结构/布局是否按图片采用（组件规范优先模式下不出现图片布局）
 ```
 ### Visual validation
 Verify the generated page against the design:
@@ -839,6 +905,8 @@ Design / Prototype / Screenshot / Figma / Requirement
    ├─ If project exists → use its installed antd version
    └─ If no project (pure Figma / screenshot / prototype) → default to React + TypeScript + latest stable Ant Design, MUST import from 'antd'
 3. Understand page structure
+   ├─ Component-First Mode → 提取内容清单（字段/操作/数据区），匹配页面模式（page-patterns），结构按第 12.3 节规范组织，不照搬原型图布局
+   └─ Visual-Reference Mode → 结构/布局按图片所示采用
 4. Identify page functionality
 5. Identify UI elements
 6. Cross-check EVERY identified element against the Mandatory Component Mapping Table (Section 3) — if it's in the table, the mapped Ant Design component is NON-NEGOTIABLE
@@ -854,8 +922,8 @@ Design / Prototype / Screenshot / Figma / Requirement
 14. Implement required interaction
 15. Validate component usage
 16. Validate API/version
-17. Validate mode consistency（第 25 节 Mode validation）
-18. Validate visual fidelity per mode（组件规范优先 → 与 Ant Design 默认一致；视觉参考 → 与图片一致）
+17. Validate mode consistency（第 25 节 Mode validation，含结构与视觉一致性）
+18. Validate visual & structural fidelity per mode（组件规范优先 → 与 Ant Design 默认一致；视觉参考 → 与图片一致）
 19. Validate interaction
 20. Validate code
 21. Deliver final implementation（含模式声明）
