@@ -271,6 +271,8 @@ Use:
 4. surrounding UI
 5. page context
 
+**Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 视觉外观仅用于辅助判断组件类型与状态，不用于定制最终视觉。默认组件规范优先模式下，Input 呈现 Ant Design 默认样式，不参考图片中的边框 / 圆角 / 背景 / 颜色。
+
 ---
 
 # 6. Prefix and Suffix

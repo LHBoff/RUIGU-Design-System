@@ -274,6 +274,8 @@ Also consider:
 - hierarchy
 - page context
 
+**Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 此处外观仅用于推断按钮的**语义类型**（如"蓝色实心"→ primary，"红色"→ danger），不用于定制最终视觉。默认组件规范优先模式下，按钮最终呈现 Ant Design 默认样式（primary 为默认蓝色），不参考图片中的具体颜色 / 圆角 / 阴影。
+
 ---
 
 # 8. Button Group

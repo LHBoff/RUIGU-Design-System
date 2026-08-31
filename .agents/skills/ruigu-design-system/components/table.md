@@ -521,6 +521,8 @@ Look for:
 If these characteristics exist,
 strongly consider Table.
 
+**Visual Mode（模式前提，见 SKILL.md 第 2 节）：** 以上视觉结构（表头、重复行、对齐列等）仅用于**识别 Table 组件类型**，不用于照抄图片中的边框样式 / 行列配色 / 单元格圆角等视觉。默认组件规范优先模式下，Table 呈现 Ant Design 默认样式。
+
 ---
 
 # 19. Table vs Card
