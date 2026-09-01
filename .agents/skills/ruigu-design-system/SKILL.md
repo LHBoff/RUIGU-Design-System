@@ -390,6 +390,10 @@ installed dependencies
 ```
 Determine the actual `antd` version.
 Then use the APIs supported by that version.
+
+> **版本一致性说明：** 本 Skill 所有参考文档（`core/*.md`、`components/*.md`）中提到的 "Ant Design" 一律指**项目实际检测到的 Ant Design 版本**，不默认任何特定大版本；文档中的 `4.x / 5.x / 6.x` 对照仅为**不同版本的 API / Token 差异参考**，实际实现时按检测到的版本选择对应写法。无项目 / 无 Ant Design 依赖时，默认使用最新稳定版（见本节末尾）。
+>
+> 参考文档中的官方文档链接均指向 `ant.design`（对应实际版本），不再锁定 `4x.ant.design`。
 Examples:
 ```text
 Project uses Ant Design 4.x
