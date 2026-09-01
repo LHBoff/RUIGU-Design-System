@@ -134,19 +134,20 @@ RUIGU-Design-System/
 
 把这个 `ruigu-design-system` **整个文件夹复制**到你正在使用的 AI 工具对应的位置（如果该位置不存在，就自己新建一个同名文件夹再放进去）：
 
-| 你使用的 AI 工具 | 能否直接安装 | skill 文件夹要放到的位置 |
+| 你使用的 AI 工具 | 能否直接安装 | skill 文件/文件夹要放到的位置 |
 |---|---|---|
 | Claude Code | ✅ 可以 | `~/.claude/skills/ruigu-design-system` |
 | Qoder | ✅ 可以 | `~/.qoder/skills/ruigu-design-system` |
 | Codex | ✅ 可以 | `~/.codex/skills/ruigu-design-system` |
-| 豆包 | ✅ 可以 | `.user_skills/ruigu-design-system` |
 | 其他支持 `.agents/skills` 的工具 | ✅ 可以 | 项目的 `.agents/skills/ruigu-design-system` |
-| Figma | ❌ 设计工具，不支持 | 无 skill 目录，见下方说明 |
-| 墨刀 | ❌ 设计工具，不支持 | 无 skill 目录，见下方说明 |
+| Figma Make | ✅ 可以 | 聊天框 → Skills → Add skill → 上传 SKILL.md（需单文件版，见下） |
+| 墨刀 AI 客户端 | ✅ 可以 | 官方标注支持 skill 扩展，具体入口以客户端内 Skill 为准 |
 
 > 提示：`~` 表示你电脑的"用户目录"（Windows 一般是 `C:\Users\你的用户名`）。放好文件夹即安装完成，**不需要运行任何命令**。Qoder 放好后重启一次，在对话框输入 `/` 即可看到技能。
 
-> **关于 Figma / 墨刀**：这两个是设计工具，**无法直接安装 RUIGU**（它们没有放置 skill 文件夹的目录，AI 为内置功能）。想用 RUIGU，只需把 Figma / 墨刀里导出的设计稿图片，发给上面任一已装好 RUIGU 的 AI 工具（Claude Code / Qoder / Codex / 豆包）即可。
+> **关于 Figma Make / 墨刀 AI 客户端**：
+> - **Figma Make**（及 Figma agent）支持上传自定义 Skill：在聊天框点击 **Skills** → **Add skill** → **Upload a file**，选择 SKILL.md 文件上传即可，之后用 `/技能名` 调用。注意 Figma 要求**单个 Markdown 文件**（不支持 `scripts/`、`references/` 等子目录），因此需要 RUIGU 的**单文件版**（把 `core/`、`components/` 内容合并进一个 SKILL.md）。
+> - **墨刀 AI 客户端**（桌面端）官方标注"支持 skill 扩展和定时任务"，可在墨刀官网下载客户端后，在客户端内添加 Skill（具体入口以客户端内实际界面为准）。
 
 ### 验证是否装好
 
