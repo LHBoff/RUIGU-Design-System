@@ -6,11 +6,11 @@ Input
 
 ## Ant Design Version
 
-Ant Design 4.x
+按项目实际安装版本（检测见 SKILL.md 第 7 节）；无项目时默认最新稳定版
 
 ## Official Documentation
 
-https://4x.ant.design/components/input/
+https://ant.design/components/input/
 
 ---
 
@@ -64,7 +64,7 @@ All should be interpreted as Input-related requirements.
 
 # 2. Ant Design Mapping
 
-RUIGU Input MUST map to Ant Design 4.x Input components.
+RUIGU Input MUST map to Ant Design Input components.
 
 Import:
 
@@ -464,7 +464,7 @@ Before generating final code verify:
 
 [ ] Correct Input component selected
 
-[ ] Correct Ant Design 4.x API
+[ ] Correct Ant Design API
 
 [ ] Correct variant
 
@@ -490,9 +490,9 @@ Before generating final code verify:
 
 # 15. Official Source
 
-Use Ant Design 4.x documentation as the authoritative
+Use Ant Design documentation as the authoritative
 reference for Input API and behavior.
 
 Official documentation:
 
-https://4x.ant.design/components/input/
+https://ant.design/components/input/

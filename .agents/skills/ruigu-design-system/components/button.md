@@ -6,11 +6,11 @@ Button
 
 ## Ant Design Version
 
-Ant Design 4.x
+按项目实际安装版本（检测见 SKILL.md 第 7 节）；无项目时默认最新稳定版
 
 ## Official Documentation
 
-https://4x.ant.design/components/button-cn/
+https://ant.design/components/button-cn/
 
 ---
 
@@ -369,7 +369,7 @@ Before generating final code verify:
 
 [ ] Import comes from antd
 
-[ ] Correct Ant Design 4.x API is used
+[ ] Correct Ant Design API is used
 
 [ ] Button type matches intent
 
@@ -387,9 +387,9 @@ Before generating final code verify:
 
 # 13. Official Source
 
-Use Ant Design 4.x documentation as the authoritative
+Use Ant Design documentation as the authoritative
 reference for Button API and behavior.
 
 Official documentation:
 
-https://4x.ant.design/components/button-cn/
+https://ant.design/components/button-cn/

@@ -6,11 +6,11 @@ Table
 
 ## Ant Design Version
 
-Ant Design 4.x
+按项目实际安装版本（检测见 SKILL.md 第 7 节）；无项目时默认最新稳定版
 
 ## Official Documentation
 
-https://4x.ant.design/components/table/
+https://ant.design/components/table/
 
 ---
 
@@ -743,7 +743,7 @@ Before generating final code verify:
 
 [ ] Table is semantically appropriate
 
-[ ] Ant Design 4.x Table is used
+[ ] Ant Design Table is used
 
 [ ] Correct columns are identified
 
@@ -775,9 +775,9 @@ Before generating final code verify:
 
 # 26. Official Source
 
-Use Ant Design 4.x documentation as the authoritative
+Use Ant Design documentation as the authoritative
 reference for Table API and behavior.
 
 Official documentation:
 
-https://4x.ant.design/components/table/
+https://ant.design/components/table/

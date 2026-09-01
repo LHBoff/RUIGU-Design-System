@@ -6,11 +6,11 @@ Select
 
 ## Ant Design Version
 
-Ant Design 4.x
+按项目实际安装版本（检测见 SKILL.md 第 7 节）；无项目时默认最新稳定版
 
 ## Official Documentation
 
-https://4x.ant.design/components/select/
+https://ant.design/components/select/
 
 ---
 
@@ -497,7 +497,7 @@ Ant Design Select cannot satisfy the requirement.
 If custom behavior is required:
 
 1. Identify the unsupported requirement.
-2. Check available Ant Design 4.x APIs.
+2. Check available Ant Design APIs.
 3. Determine whether Select can be composed with
    other Ant Design components.
 4. Only then consider a custom component.
@@ -512,7 +512,7 @@ Before generating final code verify:
 
 [ ] Correct Select component selected
 
-[ ] Correct Ant Design 4.x API
+[ ] Correct Ant Design API
 
 [ ] Single select vs multiple select is correct
 
@@ -536,9 +536,9 @@ Before generating final code verify:
 
 # 19. Official Source
 
-Use Ant Design 4.x documentation as the authoritative
+Use Ant Design documentation as the authoritative
 reference for Select API and behavior.
 
 Official documentation:
 
-https://4x.ant.design/components/select/
+https://ant.design/components/select/
