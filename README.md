@@ -93,16 +93,101 @@ Current version:
 ```text
 RUIGU-Design-System/
 │
+├── README.md
 ├── SKILL.md
 ├── VERSION
 ├── CHANGELOG.md
-├── README.md
 │
-├── components/
-├── patterns/
-├── glossary/
-└── examples/
+└── .agents/
+    └── skills/
+        └── ruigu-design-system/
+            ├── SKILL.md          ← 技能入口（描述能力与规则）
+            ├── core/             ← 页面模式 / 组件映射 / Ant Design 规则
+            │   ├── ant-design-rules.md
+            │   ├── component-mapping.md
+            │   └── page-patterns.md
+            └── components/       ← 组件参考
+                ├── button.md / input.md / select.md / table.md
 ```
+
+---
+
+## Installation（安装方法）
+
+RUIGU 是一个可被 AI 工具自动发现的 Skill 包，安装 = 把 `ruigu-design-system/` 目录放到目标工具的技能根目录。支持以下任一方式：
+
+### 方式一：GitHub 下载（推荐，先拿到文件）
+
+```bash
+git clone https://github.com/LHBoff/RUIGU-Design-System.git
+```
+
+克隆后，skill 本体位于 `RUIGU-Design-System/.agents/skills/ruigu-design-system/`。
+
+### 方式二：支持 `.agents/skills/` 约定的 AI 工具（如 Claude Code 等）
+
+把 `ruigu-design-system/` 整个目录复制到目标项目（或工具全局）的 skills 目录下：
+
+```bash
+cp -r RUIGU-Design-System/.agents/skills/ruigu-design-system <你的项目>/.agents/skills/
+```
+
+工具会自动发现 `SKILL.md`，无需额外配置。
+
+### 方式三：豆包等 AI 平台（个人/团队技能）
+
+将 `ruigu-design-system/` 整个目录放到平台的用户技能根目录，例如豆包：
+
+```bash
+cp -r RUIGU-Design-System/.agents/skills/ruigu-design-system ~/.user_skills/ruigu-design-system
+```
+
+放置后即被自动识别。最终结构如下：
+
+```text
+<技能根目录>/ruigu-design-system/
+├── SKILL.md
+├── core/
+└── components/
+```
+
+### 验证安装
+
+在对话中直接提出一个页面需求（如"生成一个带查询区的列表页"），若能按 Ant Design 规范自动生成页面，即安装成功。
+
+---
+
+## Usage（使用方法）
+
+RUIGU 通过自然语言自动识别需求并生成 Ant Design 页面，无需指定组件名。根据是否希望参考上传图片的视觉，有两种模式：
+
+### 默认模式：组件规范优先（无需特殊说明）
+
+直接描述需求即可，页面结构与视觉均按 Ant Design 规范生成：
+
+- "根据这个原型图生成页面"
+- "生成一个带查询区的列表页"
+- "把这张图做成页面"
+
+### 视觉参考模式：需要参考图片结构与视觉时
+
+在描述中包含指向性词（设计稿 / UI稿 / 设计图 / 高保真 等）：
+
+- "照着这张**设计稿**的样式做"
+- "参考这张**UI稿**的结构和配色"
+- "按**高保真**视觉还原"
+
+### 切回默认模式
+
+- "用**默认组件样式**，不要参考图片"
+- "忽略图片视觉，按 **antd 默认** 实现"
+
+### 两种模式速查
+
+| 模式 | 何时触发 | 图片参考范围 | 产出 |
+|---|---|---|---|
+| 组件规范优先（默认） | 无指向性词 | 仅内容/功能；结构布局与视觉不参考 | Ant Design 默认结构与样式 |
+| 视觉参考 | 含设计稿/UI稿/高保真等 | 结构布局 + 视觉均参考 | 保留图片布局与视觉，组件仍用 Ant Design |
 
 ---
 
