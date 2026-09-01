@@ -11,7 +11,7 @@ The fundamental rule is:
 
 **DEFAULT FIRST:** Use Ant Design components with their default props and default blue theme. Do NOT proactively change colors, layout, spacing, or typography. Only deviate from default when the design clearly requires it.
 
-**VISUAL MODE FIRST (最高优先级):** 在分析任何输入之前，必须先完成「视觉模式判定」（见第 2 节）。**默认组件规范优先**——上传图片仅作结构/内容/功能参考，视觉一律采用 Ant Design 默认规范；**仅当识别到「设计稿/设计图」等指向性文案时**，才参考图片视觉进行定制。本节及全文所有"设计明确要求 / design clearly requires"均以第 2 节的模式判定为准。
+**VISUAL MODE FIRST (最高优先级):** 在分析任何输入之前，必须先完成「视觉模式判定」（见第 2 节）。**默认组件规范优先**——上传图片仅作内容/功能参考（结构按第 12 节规范自行优化设计），视觉一律采用 Ant Design 默认规范；**仅当识别到「设计稿/UI稿/高保真」等指向性文案时**，才参考图片的结构与视觉进行搭建。本节及全文所有"设计明确要求 / design clearly requires"均以第 2 节的模式判定为准。
 
 When converting a design into code:
 ```text
@@ -89,8 +89,8 @@ Ant Design 组件体系是本 Skill 的唯一实现基础（第 3 节）。输�
 ### STEP 1 — 扫描用户自然语言指令（最高优先级）
 扫描本轮指令及对话上下文中是否出现：
 - **视觉参考触发词**（出现任一 → 视觉参考模式）：
-  - 中文：`设计稿`、`设计图`、`视觉稿`、`视觉设计`、`高保真`、`视觉还原`、`还原设计`、`按图样式`、`参考此图`、`按图片的视觉`、`按图配色`、`用图上的颜色`、`保持图片风格`、`照着这张图`、`按这个设计做` 等明确指向"参考视觉"的表述。
-  - 英文：`design spec`、`visual design`、`high-fidelity`、`hi-fi`、`mockup`、`style reference`、`match the design`、`follow the visual`、`keep the look` 等。
+  - 中文：`设计稿`、`UI稿`、`UI设计稿`、`UI图`、`设计图`、`视觉稿`、`视觉设计`、`高保真`、`视觉还原`、`还原设计`、`按图样式`、`参考此图`、`按图片的视觉`、`按图配色`、`用图上的颜色`、`保持图片风格`、`照着这张图`、`按这个设计做` 等明确指向"参考视觉"的表述。
+  - 英文：`design spec`、`visual design`、`high-fidelity`、`hi-fi`、`UI mockup`、`mockup`、`style reference`、`match the design`、`follow the visual`、`keep the look` 等。
 - **强制组件规范词**（出现任一 → 强制组件规范优先，**优先级高于触发词**）：
   - 中文：`用默认样式`、`组件库规范`、`用 antd 默认`、`默认组件样式`、`不要参考配色`、`忽略图片视觉`、`不按图样式`、`用标准组件` 等。
   - 英文：`use default`、`antd default`、`default style`、`ignore the visual`、`use component defaults` 等。
@@ -100,9 +100,11 @@ Ant Design 组件体系是本 Skill 的唯一实现基础（第 3 节）。输�
 > - "把这张图做成页面" / "帮我实现这个需求" → 组件规范优先
 > - "照着这张**设计稿**的样式做" → 视觉参考模式（出现触发词"设计稿"）
 
-### STEP 2 — 无触发词时（默认）
-- 用户指令无任何触发词 → **组件规范优先**。**即使上传的是高保真设计图，也不参考其视觉。**
-- 图片文件名 / 图片内文字含 `设计稿`、`设计图`、`hi-fi`、`mockup` 等标识：仅作**辅助信号**，用于提高对"视觉参考意图"的敏感度，但**不单独触发**视觉参考模式，仍以用户指令为准（保守默认）。
+### STEP 2 — 扫描图片自身的指向性标注（指令无触发词时）
+用户指令无触发词时，检查图片自身的指向性信息：
+- 图片**文件名** / 图片内的**置顶文字、标题、水印、标注**（如"UI 设计稿""高保真""Design Spec""Mockup"等明确指向性标识）含上述触发词 → **视觉参考模式**（参考图片的结构布局与视觉样式，再结合 Ant Design 组件搭建）；
+- 图片内文字仅为业务内容字段（如某行数据恰好叫"设计稿"）→ **不触发**，仍组件规范优先；
+- 无任何指向性标识 → 组件规范优先。
 
 ### STEP 3 — 兜底
 - 任何无法判定 / 判据不足的情况 → **组件规范优先**。
@@ -230,6 +232,7 @@ Ant Design Modal default structure (rendered automatically when props are correc
 - `title` — without it, no header and no header divider
 - `onOk` — without it, no footer button and no footer divider
 - `onCancel` — without it, no footer button and no footer divider
+**版本提示：** 以下模板的 `open` 为 Ant Design 5.x 属性；项目为 **4.x 时请改用 `visible`**（按项目实际版本选择对应 API，见第 7 节）。
 **Template (copy exactly, do not add/remove props):**
 ```tsx
 <Modal
@@ -356,7 +359,7 @@ customize its appearance
 ```
 Do NOT create a new custom button simply because the visual design differs.
 
-> **模式前提：** 本节"设计提供视觉参考"仅在「视觉参考模式」（第 2 节）下成立。在默认的「组件规范优先模式」下，设计/图片只提供结构、内容、功能、交互与层级，**不提供**颜色、字体、圆角、阴影等视觉定制依据。
+> **模式前提：** 本节"设计提供视觉参考"仅在「视觉参考模式」（第 2 节）下成立。在默认的「组件规范优先模式」下，设计/图片只提供内容、功能、交互与数据字段——**结构与视觉均不采用**，按 Ant Design 页面模式规范与默认样式自行设计；不提供结构布局、颜色、字体、圆角、阴影等实现依据。
 ---
 # 6. Visual Customization
 **模式前提：本节视觉定制仅适用于「视觉参考模式」（第 2 节）。在「组件规范优先模式」下禁止任何视觉定制——一律使用 Ant Design 默认样式，图片中的视觉差异不构成定制依据。**
