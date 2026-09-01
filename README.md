@@ -114,46 +114,51 @@ RUIGU-Design-System/
 
 ## Installation（安装方法）
 
-RUIGU 是一个可被 AI 工具自动发现的 Skill 包，安装 = 把 `ruigu-design-system/` 目录放到目标工具的技能根目录。支持以下任一方式：
+安装 RUIGU 就像"下载一个文件、解压、把文件夹放到指定位置"一样，**全程不需要写代码、不需要打开命令行**。整个安装分三步：
 
-### 方式一：GitHub 下载（推荐，先拿到文件）
+### 第一步：下载 skill 文件
+
+1. 用浏览器打开仓库页面：**https://github.com/LHBoff/RUIGU-Design-System**
+2. 点击页面右侧的绿色 **「Code」** 按钮
+3. 在弹出的菜单里点击 **「Download ZIP」**（下载压缩包）
+4. 浏览器会下载一个名为 `RUIGU-Design-System-main.zip` 的文件，**双击它解压**（Mac 双击自动解压；Windows 右键 →「全部解压缩」）
+
+### 第二步：找到要安装的 skill 文件夹
+
+解压后，按这个路径一层层进入：
+`RUIGU-Design-System-main` → `agents` → `skills`
+
+里面有一个叫 **`ruigu-design-system`** 的文件夹（里面有一个 `SKILL.md` 文件），这就是要安装的 skill 本体。记住它的位置。
+
+### 第三步：把 skill 文件夹放进你的 AI 工具
+
+把这个 `ruigu-design-system` **整个文件夹复制**到你正在使用的 AI 工具对应的位置（如果该位置不存在，就自己新建一个同名文件夹再放进去）：
+
+| 你使用的 AI 工具 | 能否直接安装 | skill 文件夹要放到的位置 |
+|---|---|---|
+| Claude Code | ✅ 可以 | `~/.claude/skills/ruigu-design-system` |
+| Qoder | ✅ 可以 | `~/.qoder/skills/ruigu-design-system` |
+| Codex | ✅ 可以 | `~/.codex/skills/ruigu-design-system` |
+| 豆包 | ✅ 可以 | `.user_skills/ruigu-design-system` |
+| 其他支持 `.agents/skills` 的工具 | ✅ 可以 | 项目的 `.agents/skills/ruigu-design-system` |
+| Figma | ❌ 设计工具，不支持 | 无 skill 目录，见下方说明 |
+| 墨刀 | ❌ 设计工具，不支持 | 无 skill 目录，见下方说明 |
+
+> 提示：`~` 表示你电脑的"用户目录"（Windows 一般是 `C:\Users\你的用户名`）。放好文件夹即安装完成，**不需要运行任何命令**。Qoder 放好后重启一次，在对话框输入 `/` 即可看到技能。
+
+> **关于 Figma / 墨刀**：这两个是设计工具，**无法直接安装 RUIGU**（它们没有放置 skill 文件夹的目录，AI 为内置功能）。想用 RUIGU，只需把 Figma / 墨刀里导出的设计稿图片，发给上面任一已装好 RUIGU 的 AI 工具（Claude Code / Qoder / Codex / 豆包）即可。
+
+### 验证是否装好
+
+重新打开你的 AI 工具，在对话里直接说一个需求，例如："**生成一个带查询区的列表页**"。如果它能按 Ant Design 规范自动生成页面，就说明安装成功。
+
+### 开发者快捷方式（可选，会用命令行才用）
+
+如果你会用命令行，也可以跳过第一步，直接用下面这行命令把整个仓库下载到当前文件夹（效果等同"下载 ZIP"）：
 
 ```bash
 git clone https://github.com/LHBoff/RUIGU-Design-System.git
 ```
-
-克隆后，skill 本体位于 `RUIGU-Design-System/.agents/skills/ruigu-design-system/`。
-
-### 方式二：支持 `.agents/skills/` 约定的 AI 工具（如 Claude Code 等）
-
-把 `ruigu-design-system/` 整个目录复制到目标项目（或工具全局）的 skills 目录下：
-
-```bash
-cp -r RUIGU-Design-System/.agents/skills/ruigu-design-system <你的项目>/.agents/skills/
-```
-
-工具会自动发现 `SKILL.md`，无需额外配置。
-
-### 方式三：豆包等 AI 平台（个人/团队技能）
-
-将 `ruigu-design-system/` 整个目录放到平台的用户技能根目录，例如豆包：
-
-```bash
-cp -r RUIGU-Design-System/.agents/skills/ruigu-design-system ~/.user_skills/ruigu-design-system
-```
-
-放置后即被自动识别。最终结构如下：
-
-```text
-<技能根目录>/ruigu-design-system/
-├── SKILL.md
-├── core/
-└── components/
-```
-
-### 验证安装
-
-在对话中直接提出一个页面需求（如"生成一个带查询区的列表页"），若能按 Ant Design 规范自动生成页面，即安装成功。
 
 ---
 

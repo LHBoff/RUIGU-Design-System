@@ -26,7 +26,7 @@
 - `core/component-mapping.md`：核心原则与图片识别补充「结构/视觉不参与」模式前提。
 - `core/page-patterns.md`：查询区「一行最多 3 个」规则与模式前提。
 - `components/{button,input,select,table}.md`：Visual Design Mapping 澄清「外观仅用于语义识别，不用于视觉定制」；版本声明改为按项目实际版本。
-- `README.md`：新增「Visual Mode」说明，决策流程图并入模式判定，版本号对齐；新增「Installation（安装方法）」「Usage（使用方法）」章节，便于团队快速安装与上手。
+- `README.md`：新增「Visual Mode」说明，决策流程图并入模式判定，版本号对齐；新增「Installation（安装方法）」「Usage（使用方法）」章节，安装方法改为「网页下载 ZIP + 复制文件夹」三步傻瓜版（零命令行）；安装对照表加入 Qoder，并补充 Figma / 墨刀设计工具的使用说明，便于团队快速安装与上手。
 
 ---
 
