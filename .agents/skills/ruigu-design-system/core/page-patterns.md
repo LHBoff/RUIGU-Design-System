@@ -18,7 +18,7 @@ Page Structure
 ↓
 Component Mapping
 ↓
-Ant Design 4.x
+Ant Design
 ↓
 Code
 
@@ -929,7 +929,7 @@ Identify components inside each region.
 
 Step 5:
 
-Map components to Ant Design 4.x.
+Map components to Ant Design.
 
 Example:
 
@@ -1039,7 +1039,7 @@ Before final output:
 
 [ ] Components mapped
 
-[ ] Ant Design 4.x components selected
+[ ] Ant Design components selected
 
 [ ] Components match the page pattern
 

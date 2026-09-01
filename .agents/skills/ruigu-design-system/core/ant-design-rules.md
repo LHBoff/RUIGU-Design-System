@@ -8,12 +8,12 @@ Design Image / Figma / Prototype / Screenshot / Natural Language
 
 into:
 
-Ant Design 4.x based React + TypeScript UI code.
+Ant Design based React + TypeScript UI code.
 
 The goal is not to reproduce visual pixels using arbitrary HTML/CSS.
 
 The goal is to understand the design intent and implement it
-using the correct Ant Design 4.x components and patterns.
+using the correct Ant Design components and patterns.
 
 ---
 
@@ -39,7 +39,7 @@ Component Recognition
 ↓
 RUIGU Component Mapping
 ↓
-Ant Design 4.x Component Selection
+Ant Design Component Selection
 ↓
 Ant Design API Implementation
 ↓
@@ -299,7 +299,7 @@ consider:
 
 Before creating custom UI:
 
-1. Check whether Ant Design 4.x provides
+1. Check whether Ant Design provides
    an appropriate component.
 
 2. Check whether multiple Ant Design components
@@ -372,7 +372,7 @@ Pagination
 # 11. Component API Selection
 
 After selecting a component,
-use the official Ant Design 4.x API.
+use the official Ant Design API.
 
 Do not invent props.
 
@@ -416,16 +416,16 @@ Multiple Select:
 
 Target:
 
-Ant Design 4.x
+Ant Design
 
 Do not use APIs introduced only in Ant Design 5.x.
 
 When implementing code,
-prefer APIs documented by the Ant Design 4.x documentation.
+prefer APIs documented by the Ant Design documentation.
 
 Official documentation:
 
-https://4x.ant.design/
+https://ant.design/
 
 ---
 
@@ -854,7 +854,7 @@ perform the following validation.
 
 ## API
 
-[ ] Ant Design 4.x API
+[ ] Ant Design API
 
 [ ] No invented props
 
@@ -974,7 +974,7 @@ Code:
 
 React + TypeScript
 +
-Ant Design 4.x
+Ant Design
 
 ↓
 
@@ -1134,7 +1134,7 @@ Human Intent
 +
 Design
 +
-Ant Design 4.x
+Ant Design
 
 into:
 

@@ -9,7 +9,7 @@ The purpose is NOT simply to match keywords.
 
 The purpose is to understand the user's intent,
 identify the UI element,
-select the appropriate Ant Design 4.x component,
+select the appropriate Ant Design component,
 and generate a standardized implementation.
 
 Decision flow:
@@ -22,7 +22,7 @@ UI Element Recognition
 ↓
 Component Selection
 ↓
-Ant Design 4.x Mapping
+Ant Design Mapping
 ↓
 Implementation
 
@@ -791,7 +791,7 @@ Do NOT immediately invent a custom component.
 First:
 
 1. Analyze the requirement.
-2. Check existing Ant Design 4.x components.
+2. Check existing Ant Design components.
 3. Check whether multiple Ant Design components
    can be composed.
 4. Only then classify as CUSTOM COMPONENT.
@@ -893,7 +893,7 @@ Before final output:
 
 [ ] Components identified
 
-[ ] Ant Design 4.x components selected
+[ ] Ant Design components selected
 
 [ ] Correct variants selected
 
