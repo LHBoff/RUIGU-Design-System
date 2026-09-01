@@ -243,7 +243,7 @@ Variant / Props
       ↓
 Component Composition
       ↓
-Ant Design 4.x
+Ant Design（按项目实际安装版本，见 SKILL.md 第 7 节）
       ↓
 UI / Code
 ```
