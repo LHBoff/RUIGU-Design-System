@@ -1,6 +1,6 @@
 ---
 name: ruigu-design-system
-description: 锐锢中台组件库。根据原型、设计稿或自然语言需求自动匹配并使用锐锢中台组件，优先复用已有组件，无对应组件时才进行扩展或自定义，并遵循锐锢设计规范完成视觉样式定制。默认按组件库规范生成页面，图片视觉不参与实现；仅当识别到「设计稿/设计图」等指向性文案时，才参考图片视觉进行定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists. By default, build with the Ant Design component library's standard style; only reference the visual style of an uploaded image when explicit visual-reference wording (e.g. "design draft / design image") is detected.
+description: 锐锢中台组件库，基于项目实际安装版本的 Ant Design 构建。根据原型、设计稿或自然语言需求自动匹配并使用锐锢中台组件，优先复用已有组件，无对应组件时才进行扩展或自定义，并遵循锐锢设计规范完成视觉样式定制。默认按组件库规范（Ant Design 默认样式）生成页面，图片视觉不参与实现；仅当识别到「设计稿/设计图」等指向性文案时，才参考图片视觉进行定制。Analyze prototypes, designs, or natural-language commands to automatically identify UI components; always implement on top of the project's actual Ant Design version—use Ant Design when a matching component exists, build custom only when none exists. By default, build with the Ant Design component library's standard style; only reference the visual style of an uploaded image when explicit visual-reference wording (e.g. "design draft / design image") is detected.
 ---
 # RUIGU Design System
 ## 1. Core Mission
